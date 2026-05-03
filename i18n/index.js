@@ -16,7 +16,8 @@
  */
 
 const I18N_SUPPORTED_LANGS = ['ru', 'es'];
-const I18N_DEFAULT_LANG    = 'ru';
+const I18N_DEFAULT_LANG    = 'es';
+const I18N_FALLBACK_LANG   = 'ru';
 const I18N_STORAGE_KEY     = 'kld_lang';
 
 let _strings = {};
@@ -48,7 +49,7 @@ function currentLang() {
 }
 
 function switchLang() {
-  const next = _lang === 'ru' ? 'es' : 'ru';
+  const next = _lang === 'es' ? 'ru' : 'es';
   localStorage.setItem(I18N_STORAGE_KEY, next);
   location.reload();
 }
@@ -148,12 +149,12 @@ function _injectLangToggle() {
 
   const btn     = document.createElement('button');
   btn.className = 'i18n-toggle';
-  btn.title     = _lang === 'ru' ? 'Cambiar a Español' : 'Переключить на Русский';
+  btn.title     = _lang === 'es' ? 'Переключить на Русский' : 'Cambiar a Español';
   btn.setAttribute('aria-label', btn.title);
   btn.onclick   = switchLang;
 
-  const flag  = _lang === 'ru' ? '🇪🇸' : '🇷🇺';
-  const label = _lang === 'ru' ? 'ES'   : 'RU';
+  const flag  = _lang === 'es' ? '🇷🇺' : '🇪🇸';
+  const label = _lang === 'es' ? 'RU'   : 'ES';
 
   btn.innerHTML = `
     <span class="i18n-toggle__flag">${flag}</span>
@@ -345,12 +346,12 @@ async function _init() {
     console.warn(`[i18n] Failed to load "${_lang}", trying fallback "ru"...`);
     try {
       const [strings] = await Promise.all([
-        load(I18N_DEFAULT_LANG),
+        load(I18N_FALLBACK_LANG),
         new Promise(resolve => setTimeout(resolve, 500)),
       ]);
       _strings = strings;
-      _lang = I18N_DEFAULT_LANG;
-      localStorage.setItem(I18N_STORAGE_KEY, I18N_DEFAULT_LANG);
+      _lang = I18N_FALLBACK_LANG;
+      localStorage.setItem(I18N_STORAGE_KEY, I18N_FALLBACK_LANG);
     } catch (fallbackErr) {
       console.error('[i18n] Fallback also failed:', fallbackErr);
       loader.hide();
