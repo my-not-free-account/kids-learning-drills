@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Математические тренажёры</title>
+<script>const PAGE_KEY = 'index';</script>
+<script src="i18n/index.js" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -298,39 +300,39 @@
 <div class="container">
 
   <header class="header">
-    <div class="header-badge">🧮 Учебные тренажёры</div>
-    <h1>Математика —<br><span>тренируйся каждый день</span></h1>
-    <p class="subtitle">Интерактивные упражнения для школьников. Выбери тему и начинай!</p>
+    <div class="header-badge" data-i18n="header_badge"></div>
+    <h1><span data-i18n="h1_line1"></span><br><span data-i18n="h1_line2"></span></h1>
+    <p class="subtitle" data-i18n="subtitle"></p>
   </header>
 
-  <div class="section-label">Умножение</div>
+  <div class="section-label" data-i18n="section_multiply"></div>
   <div class="trainers-grid">
 
     <a class="trainer-card card-multiply" href="multiplication-trainer-main.html">
       <div class="card-icon">✖️</div>
       <div class="card-body">
-        <div class="card-title">Таблица умножения</div>
-        <div class="card-desc">20 примеров за раунд. Визуализация с корзинками и цыплятами. Выбор таблицы или микс 2–10.</div>
+        <div class="card-title" data-i18n="card_multiply_title"></div>
+        <div class="card-desc" data-i18n="card_multiply_desc"></div>
       </div>
       <div class="card-footer">
-        <span class="card-tag tag-multiply">Умножение</span>
+        <span class="card-tag tag-multiply" data-i18n="tag_multiply"></span>
       </div>
       <span class="card-arrow">→</span>
     </a>
 
   </div>
 
-  <div class="section-label">Деление</div>
+  <div class="section-label" data-i18n="section_divide"></div>
   <div class="trainers-grid">
 
     <a class="trainer-card card-divide" href="division-trainer-main.html">
       <div class="card-icon">➗</div>
       <div class="card-body">
-        <div class="card-title">Тренажёр деления</div>
-        <div class="card-desc">Drag & drop: распредели цыплят по корзинкам. Выбор делителя, визуальная подсказка.</div>
+        <div class="card-title" data-i18n="card_divide_main_title"></div>
+        <div class="card-desc" data-i18n="card_divide_main_desc"></div>
       </div>
       <div class="card-footer">
-        <span class="card-tag tag-divide">Деление</span>
+        <span class="card-tag tag-divide" data-i18n="tag_divide"></span>
       </div>
       <span class="card-arrow">→</span>
     </a>
@@ -338,28 +340,28 @@
     <a class="trainer-card card-divide" href="division-trainer_1.html">
       <div class="card-icon">➗</div>
       <div class="card-body">
-        <div class="card-title">Деление столбиком</div>
-        <div class="card-desc">Тренажёр для 4 класса. Пошаговое деление с проверкой каждого шага.</div>
+        <div class="card-title" data-i18n="card_divide_col_title"></div>
+        <div class="card-desc" data-i18n="card_divide_col_desc"></div>
       </div>
       <div class="card-footer">
-        <span class="card-tag tag-divide">Деление</span>
+        <span class="card-tag tag-divide" data-i18n="tag_divide"></span>
       </div>
       <span class="card-arrow">→</span>
     </a>
 
   </div>
 
-  <div class="section-label">Вычитание</div>
+  <div class="section-label" data-i18n="section_subtract"></div>
   <div class="trainers-grid">
 
     <a class="trainer-card card-subtract" href="subtraction-trainer_1.html">
       <div class="card-icon">➖</div>
       <div class="card-body">
-        <div class="card-title">Вычитание столбиком</div>
-        <div class="card-desc">Тренажёр для 3–4 класса. Пошаговое вычитание с переносом разряда.</div>
+        <div class="card-title" data-i18n="card_subtract_title"></div>
+        <div class="card-desc" data-i18n="card_subtract_desc"></div>
       </div>
       <div class="card-footer">
-        <span class="card-tag tag-subtract">Вычитание</span>
+        <span class="card-tag tag-subtract" data-i18n="tag_subtract"></span>
         <span class="card-version">v1</span>
       </div>
       <span class="card-arrow">→</span>
@@ -367,7 +369,7 @@
 
   </div>
 
-  <p class="footer-note">Прототипы учебных приложений · Версионирование на <a href="https://github.com" target="_blank">GitHub</a></p>
+  <p class="footer-note" data-i18n="footer_note"></p>
 
 </div>
 </body>
