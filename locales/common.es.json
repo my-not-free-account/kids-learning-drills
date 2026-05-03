@@ -1,0 +1,18 @@
+{
+  "nav_prev": "← Anterior",
+  "nav_next": "Siguiente →",
+  "nav_home": "🏠 Inicio",
+  "progress_label": "Progreso",
+  "progress_correct": "Correcto",
+  "progress_wrong": "Incorrecto",
+  "settings_title": "⚙️ Ajustes",
+  "apply_btn": "🎯 Aplicar — 10 nuevos ejercicios",
+  "check_btn": "✔️ Comprobar",
+  "attempts_label": "Intentos",
+  "feedback_correct": "🎉 ¡Correcto! ¡Muy bien!",
+  "feedback_wrong_reveal": "😢 Respuesta correcta: {answer}",
+  "feedback_attempts_left": "😟 ¡Incorrecto! Intentos restantes: {left}",
+  "empty_state_text": "Ajusta los parámetros y pulsa «Aplicar»\npara empezar.",
+  "example_counter": "Ejercicio {current} de {total}",
+  "lang_toggle_label": "RU"
+}
