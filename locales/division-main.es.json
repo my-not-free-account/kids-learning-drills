@@ -1,0 +1,22 @@
+{
+  "page_title": "Ejercicios de división",
+  "h1": "➗ Ejercicios de división",
+  "subtitle": "Elige un número",
+  "table_label": "¿Entre qué número dividimos?",
+  "apply_btn": "🎯 Aplicar — 20 nuevos ejercicios",
+  "progress_counter_total": "0 / 20",
+  "division_label_dividend": "dividendo",
+  "division_label_divisor": "divisor",
+  "input_label": "Respuesta",
+  "feedback_correct": "🎉 ¡Correcto!",
+  "feedback_wrong_reveal": "😢 Respuesta correcta: {answer}",
+  "feedback_attempts_left": "🤔 No es correcto… Intentos restantes: {left}",
+  "insight_label": "💡 Recuerda la relación",
+  "insight_division": "{dividend} ÷ {divisor} = {quotient}",
+  "insight_multiplication": "{quotient} × {divisor} = {dividend}",
+  "pasture_label": "🌿 Corral — todos los pollitos aquí ({count})",
+  "basket_label_one": "🧺 {count} cesta",
+  "basket_label_few": "🧺 {count} cestas",
+  "basket_label_many": "🧺 {count} cestas",
+  "empty_state_text": "Elige un número y pulsa «Aplicar»\npara empezar."
+}

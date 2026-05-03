@@ -1,0 +1,22 @@
+{
+  "page_title": "Resta por columnas — Ejercicios",
+  "h1": "➖ Resta por columnas",
+  "subtitle": "Ejercicios para 3.º–4.º curso",
+  "mode_label": "Tipo de ejercicios",
+  "mode_no_borrow": "Sin llevada",
+  "mode_borrow": "Con llevada",
+  "max_label": "Minuendo (hasta)",
+  "max_display": "hasta {value}",
+  "borrow_badge": "🔄 Con llevada",
+  "input_label": "Diferencia",
+  "col_label_hundreds": "centenas",
+  "col_label_tens": "decenas",
+  "col_label_units": "unidades",
+  "inline_label_minuend": "minuendo",
+  "inline_label_subtrahend": "sustraendo",
+  "inline_label_difference": "diferencia",
+  "feedback_correct": "🎉 ¡Correcto! ¡Excelente!",
+  "feedback_wrong_reveal": "😢 Respuesta correcta: {answer}",
+  "feedback_attempts_left": "😟 ¡Incorrecto! Intentos restantes: {left}",
+  "empty_state_text": "Ajusta los parámetros y pulsa\n«Aplicar» para empezar."
+}

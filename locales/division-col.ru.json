@@ -1,0 +1,23 @@
+{
+  "page_title": "Деление столбиком — Тренажёр",
+  "h1": "➗ Деление столбиком",
+  "subtitle": "Тренажёр для 4 класса",
+  "mode_label": "Тип деления",
+  "mode_no_remainder": "Без остатка",
+  "mode_remainder": "С остатком",
+  "divisor_label": "Делитель (до)",
+  "divisor_display": "до {value}",
+  "dividend_label": "Делимое (до)",
+  "dividend_display": "до {value}",
+  "division_label_dividend": "делимое",
+  "division_label_divisor": "делитель",
+  "division_label_quotient": "частное",
+  "input_label_quotient": "Частное",
+  "input_label_remainder": "Остаток",
+  "remainder_separator": "ост.",
+  "feedback_correct": "🎉 Верно! Молодец!",
+  "feedback_wrong_reveal": "😢 Правильный ответ: {quotient}",
+  "feedback_wrong_reveal_remainder": "😢 Правильный ответ: {quotient} ост. {remainder}",
+  "feedback_attempts_left": "😟 Неверно! Попыток осталось: {left}",
+  "empty_state_text": "Настрой параметры и нажми «Применить»,\nчтобы начать!"
+}

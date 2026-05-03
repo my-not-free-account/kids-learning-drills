@@ -1,0 +1,23 @@
+{
+  "page_title": "División por columnas — Ejercicios",
+  "h1": "➗ División por columnas",
+  "subtitle": "Ejercicios para 4.º curso",
+  "mode_label": "Tipo de división",
+  "mode_no_remainder": "Sin resto",
+  "mode_remainder": "Con resto",
+  "divisor_label": "Divisor (hasta)",
+  "divisor_display": "hasta {value}",
+  "dividend_label": "Dividendo (hasta)",
+  "dividend_display": "hasta {value}",
+  "division_label_dividend": "dividendo",
+  "division_label_divisor": "divisor",
+  "division_label_quotient": "cociente",
+  "input_label_quotient": "Cociente",
+  "input_label_remainder": "Resto",
+  "remainder_separator": "resto",
+  "feedback_correct": "🎉 ¡Correcto! ¡Muy bien!",
+  "feedback_wrong_reveal": "😢 Respuesta correcta: {quotient}",
+  "feedback_wrong_reveal_remainder": "😢 Respuesta correcta: {quotient} resto {remainder}",
+  "feedback_attempts_left": "😟 ¡Incorrecto! Intentos restantes: {left}",
+  "empty_state_text": "Ajusta los parámetros y pulsa «Aplicar»\npara empezar."
+}

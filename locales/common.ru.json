@@ -1,0 +1,18 @@
+{
+  "nav_prev": "← Назад",
+  "nav_next": "Вперёд →",
+  "nav_home": "🏠 На главную",
+  "progress_label": "Прогресс",
+  "progress_correct": "Правильно",
+  "progress_wrong": "Неправильно",
+  "settings_title": "⚙️ Настройки",
+  "apply_btn": "🎯 Применить — новые 10 примеров",
+  "check_btn": "✔️ Проверить",
+  "attempts_label": "Попытки",
+  "feedback_correct": "🎉 Верно! Молодец!",
+  "feedback_wrong_reveal": "😢 Правильный ответ: {answer}",
+  "feedback_attempts_left": "😟 Неверно! Попыток осталось: {left}",
+  "empty_state_text": "Настрой параметры и нажми «Применить»,\nчтобы начать!",
+  "example_counter": "Пример {current} из {total}",
+  "lang_toggle_label": "ES"
+}

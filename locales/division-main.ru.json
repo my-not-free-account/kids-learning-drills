@@ -1,0 +1,22 @@
+{
+  "page_title": "Тренажёр деления",
+  "h1": "➗ Тренажёр деления",
+  "subtitle": "Выбери число",
+  "table_label": "На какое число делим?",
+  "apply_btn": "🎯 Применить — новые 20 примеров",
+  "progress_counter_total": "0 / 20",
+  "division_label_dividend": "делимое",
+  "division_label_divisor": "делитель",
+  "input_label": "Ответ",
+  "feedback_correct": "🎉 Верно!",
+  "feedback_wrong_reveal": "😢 Правильный ответ: {answer}",
+  "feedback_attempts_left": "🤔 Не то… осталось попыток: {left}",
+  "insight_label": "💡 Запомни связь",
+  "insight_division": "{dividend} ÷ {divisor} = {quotient}",
+  "insight_multiplication": "{quotient} × {divisor} = {dividend}",
+  "pasture_label": "🌿 Загон — все цыплята здесь ({count})",
+  "basket_label_one": "🧺 {count} корзинка",
+  "basket_label_few": "🧺 {count} корзинки",
+  "basket_label_many": "🧺 {count} корзинок",
+  "empty_state_text": "Выбери число и нажми «Применить»,\nчтобы начать!"
+}

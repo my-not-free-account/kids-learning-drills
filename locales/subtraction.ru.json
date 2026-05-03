@@ -1,0 +1,22 @@
+{
+  "page_title": "Вычитание столбиком — Тренажёр",
+  "h1": "➖ Вычитание столбиком",
+  "subtitle": "Тренажёр для 3–4 класса",
+  "mode_label": "Тип примеров",
+  "mode_no_borrow": "Без перехода\nчерез разряд",
+  "mode_borrow": "С переходом\nчерез разряд",
+  "max_label": "Уменьшаемое (до)",
+  "max_display": "до {value}",
+  "borrow_badge": "🔄 С переходом через разряд",
+  "input_label": "Разность",
+  "col_label_hundreds": "сотни",
+  "col_label_tens": "десятки",
+  "col_label_units": "единицы",
+  "inline_label_minuend": "уменьшаемое",
+  "inline_label_subtrahend": "вычитаемое",
+  "inline_label_difference": "разность",
+  "feedback_correct": "🎉 Верно! Отлично!",
+  "feedback_wrong_reveal": "😢 Правильный ответ: {answer}",
+  "feedback_attempts_left": "😟 Неверно! Попыток осталось: {left}",
+  "empty_state_text": "Настрой параметры и нажми\n«Применить», чтобы начать!"
+}
