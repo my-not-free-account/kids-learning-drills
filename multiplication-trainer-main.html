@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Таблица умножения — Тренажёр</title>
+<title></title>
+<script>const PAGE_KEY = 'multiplication';</script>
+<script src="i18n/index.js" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -60,7 +62,7 @@
     margin-bottom: 28px;
   }
 
-  /* ── DECORATIVE ICONS ── */
+  
   .deco {
     position: fixed;
     pointer-events: none;
@@ -79,13 +81,13 @@
     50% { transform: translateY(-12px) rotate(5deg); }
   }
 
-  /* ── LAYOUT ── */
+  
   .container {
     max-width: 700px;
     margin: 0 auto;
   }
 
-  /* ── SETTINGS CARD ── */
+  
   .settings-card {
     background: var(--card);
     border: 1.5px solid var(--border);
@@ -187,7 +189,7 @@
 
   .apply-btn:active { transform: translateY(0); }
 
-  /* ── PROGRESS BAR ── */
+  
   .progress-section {
     margin-bottom: 20px;
   }
@@ -244,7 +246,7 @@
     margin-right: 4px;
   }
 
-  /* ── EXAMPLE CARD ── */
+  
   .example-card {
     background: var(--card);
     border: 1.5px solid var(--border);
@@ -286,7 +288,7 @@
     margin-bottom: 20px;
   }
 
-  /* ── MULTIPLICATION DISPLAY ── */
+  
   .mult-visual {
     display: flex;
     justify-content: center;
@@ -324,7 +326,7 @@
     line-height: 1;
   }
 
-  /* ── INPUT AREA ── */
+  
   .input-area {
     display: flex;
     gap: 16px;
@@ -382,7 +384,7 @@
     background: #fde8e8;
   }
 
-  /* ── CHECK BUTTON ── */
+  
   .check-btn {
     display: block;
     width: 100%;
@@ -413,7 +415,7 @@
     transform: none;
   }
 
-  /* ── FEEDBACK ── */
+  
   .feedback {
     text-align: center;
     font-family: 'Baloo 2', cursive;
@@ -427,7 +429,7 @@
   .feedback.correct { color: var(--correct); }
   .feedback.wrong { color: var(--wrong); }
 
-  /* ── NAV BUTTONS ── */
+  
   .nav-buttons {
     display: flex;
     gap: 12px;
@@ -466,7 +468,7 @@
     transform: none;
   }
 
-  /* ── CONFETTI ── */
+  
   .confetti-container {
     position: fixed;
     top: 0; left: 0;
@@ -488,7 +490,7 @@
     100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
   }
 
-  /* ── EMOJI OVERLAY ── */
+  
   .emoji-burst {
     position: fixed;
     top: 50%; left: 50%;
@@ -506,7 +508,7 @@
     100% { transform: translate(-50%, -60%) scale(0.8); opacity: 0; }
   }
 
-  /* ── EMPTY STATE ── */
+  
   .empty-state {
     text-align: center;
     padding: 48px 24px;
@@ -516,7 +518,7 @@
   .empty-state .emoji { font-size: 3rem; margin-bottom: 12px; }
   .empty-state p { font-size: 1rem; font-weight: 600; }
 
-  /* ── BADGE on card ── */
+  
   .card-badge {
     position: absolute;
     top: 20px; right: 20px;
@@ -529,7 +531,7 @@
   .card-badge.correct-badge { background: var(--accent-light); }
   .card-badge.wrong-badge { background: #fde8e8; }
 
-  /* ── ATTEMPTS ── */
+  
   .attempts-row {
     display: flex;
     justify-content: center;
@@ -567,7 +569,7 @@
     border-color: var(--correct);
   }
 
-  /* ── BASKET VISUAL ── */
+  
   .basket-section {
     background: var(--yellow-light);
     border: 2px solid var(--yellow);
@@ -651,7 +653,7 @@
     text-align: center;
   }
 
-  /* ── DRAG SOURCE ── */
+  
   .chick-source {
     text-align: center;
     margin-bottom: 14px;
@@ -696,7 +698,6 @@
     user-select: none;
     animation: chickPop 0.25s ease both;
     transition: transform 0.1s, filter 0.1s;
-    title: "Двойной клик — убрать";
   }
 
   .chick-in-basket:hover {
@@ -758,55 +759,49 @@
 <div class="confetti-container" id="confettiContainer"></div>
 
 <div class="container">
-  <h1>✖️ Таблица умножения</h1>
-  <p class="subtitle">Тренажёр — 20 уникальных примеров за раунд</p>
+  <h1 data-i18n="h1"></h1>
+  <p class="subtitle" data-i18n="subtitle"></p>
 
-  <!-- SETTINGS -->
   <div class="settings-card">
-    <div class="settings-title">⚙️ Настройки</div>
-
-    <span class="table-label">Выбери таблицу умножения</span>
+    <div class="settings-title" data-i18n="settings_title"></div>
+    <span class="table-label" data-i18n="table_label"></span>
     <div class="table-buttons" id="tableButtons">
-      <button class="table-btn mix-btn active" data-val="mix" onclick="selectTable(this)">Микс 2–10</button>
-      <button class="table-btn" data-val="2" onclick="selectTable(this)">на 2</button>
-      <button class="table-btn" data-val="3" onclick="selectTable(this)">на 3</button>
-      <button class="table-btn" data-val="4" onclick="selectTable(this)">на 4</button>
-      <button class="table-btn" data-val="5" onclick="selectTable(this)">на 5</button>
-      <button class="table-btn" data-val="6" onclick="selectTable(this)">на 6</button>
-      <button class="table-btn" data-val="7" onclick="selectTable(this)">на 7</button>
-      <button class="table-btn" data-val="8" onclick="selectTable(this)">на 8</button>
-      <button class="table-btn" data-val="9" onclick="selectTable(this)">на 9</button>
-      <button class="table-btn" data-val="10" onclick="selectTable(this)">на 10</button>
+      <button class="table-btn mix-btn active" data-val="mix" onclick="selectTable(this)" data-i18n="table_mix"></button>
+      <button class="table-btn" data-val="2"  onclick="selectTable(this)" data-i18n="table_btn_2"></button>
+      <button class="table-btn" data-val="3"  onclick="selectTable(this)" data-i18n="table_btn_3"></button>
+      <button class="table-btn" data-val="4"  onclick="selectTable(this)" data-i18n="table_btn_4"></button>
+      <button class="table-btn" data-val="5"  onclick="selectTable(this)" data-i18n="table_btn_5"></button>
+      <button class="table-btn" data-val="6"  onclick="selectTable(this)" data-i18n="table_btn_6"></button>
+      <button class="table-btn" data-val="7"  onclick="selectTable(this)" data-i18n="table_btn_7"></button>
+      <button class="table-btn" data-val="8"  onclick="selectTable(this)" data-i18n="table_btn_8"></button>
+      <button class="table-btn" data-val="9"  onclick="selectTable(this)" data-i18n="table_btn_9"></button>
+      <button class="table-btn" data-val="10" onclick="selectTable(this)" data-i18n="table_btn_10"></button>
     </div>
-
-    <button class="apply-btn" onclick="applySettings()">🎯 Применить — новые 20 примеров</button>
+    <button class="apply-btn" onclick="applySettings()" data-i18n="apply_btn"></button>
   </div>
 
-  <!-- PROGRESS BAR -->
   <div class="progress-section" id="progressSection" style="display:none">
     <div class="progress-header">
-      <span>Прогресс</span>
+      <span data-i18n="progress_label"></span>
       <span class="progress-counter" id="progressCounter">0 / 20</span>
     </div>
     <div class="progress-bar-track" id="progressBar"></div>
     <div class="progress-legend">
-      <span><span class="legend-dot" style="background:var(--correct)"></span>Правильно: <span id="correctCount">0</span></span>
-      <span><span class="legend-dot" style="background:var(--wrong)"></span>Неправильно: <span id="wrongCount">0</span></span>
+      <span><span class="legend-dot" style="background:var(--correct)"></span><span data-i18n="progress_correct"></span>: <span id="correctCount">0</span></span>
+      <span><span class="legend-dot" style="background:var(--wrong)"></span><span data-i18n="progress_wrong"></span>: <span id="wrongCount">0</span></span>
     </div>
   </div>
 
-  <!-- EXAMPLE CARD -->
   <div id="exampleArea">
     <div class="empty-state">
       <div class="emoji">🌟</div>
-      <p>Выбери таблицу и нажми «Применить»,<br>чтобы начать тренировку!</p>
+      <p data-i18n="empty_state_text"></p>
     </div>
   </div>
 
-  <!-- NAV BUTTONS -->
   <div class="nav-buttons" id="navButtons" style="display:none">
-    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Назад</button>
-    <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Вперёд →</button>
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled data-i18n="nav_prev"></button>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)" data-i18n="nav_next"></button>
   </div>
 </div>
 
@@ -891,13 +886,13 @@
 
   // After answer: static chick display
   function buildStaticBaskets(table, other) {
-    const groups   = other;   // number of baskets
-    const perGroup = table;   // chicks per basket (Russian system: table × other = add table, other times)
-    const bWord = wordForm(groups,   'корзинка', 'корзинки', 'корзинок');
-    const cWord = wordForm(perGroup, 'цыплёнок', 'цыплёнка', 'цыплят');
+    const groups   = other;
+    const perGroup = table;
+    const bKey = groups === 1 ? 'basket_group_word_one' : groups < 5 ? 'basket_group_word_few' : 'basket_group_word_many';
+    const cKey = perGroup === 1 ? 'basket_chick_word_one' : perGroup < 5 ? 'basket_chick_word_few' : 'basket_chick_word_many';
 
     let html = `<div class="basket-section">
-      <div class="basket-label">🧺 ${groups} ${bWord} по ${perGroup} ${cWord}</div>
+      <div class="basket-label">${t('basket_label', { groups, bWord: t(bKey), perGroup, cWord: t(cKey) })}</div>
       <div class="basket-groups">`;
 
     for (let g = 0; g < groups; g++) {
@@ -914,10 +909,9 @@
 
   // Before answer: drag & drop interface
   function buildDragZone(table, other) {
-    const groups  = other;  // number of baskets
-    const maxTotal = table * 10; // absolute cap for this table
-
-    const bWord = wordForm(groups, 'корзинка', 'корзинки', 'корзинок');
+    const groups  = other;
+    const maxTotal = table * 10;
+    const bKey = groups === 1 ? 'basket_group_word_one' : groups < 5 ? 'basket_group_word_few' : 'basket_group_word_many';
 
     let basketsHTML = '';
     for (let g = 0; g < groups; g++) {
@@ -928,9 +922,9 @@
     }
 
     return `<div class="basket-section" id="dragBasketSection">
-      <div class="basket-label">🧺 ${groups} ${bWord} — перетащи 🐣 в корзинки</div>
+      <div class="basket-label">${t('drag_label', { count: groups, bWord: t(bKey) })}</div>
       <div class="chick-source">
-        <div class="chick-source-label">Перетащи цыплёнка</div>
+        <div class="chick-source-label">${t('drag_source_label')}</div>
         <span class="chick-draggable" id="chickSource" draggable="true">🐣</span>
         <div class="chick-max-hint" id="chickMaxHint"></div>
       </div>
@@ -948,7 +942,7 @@
       pipsHtml += `<div class="${cls}"></div>`;
     }
     return `<div class="attempts-row">
-      Попытки: <div class="attempt-pips">${pipsHtml}</div>
+      ${t('attempts_label')}: <div class="attempt-pips">${pipsHtml}</div>
     </div>`;
   }
 
@@ -967,15 +961,15 @@
 
     let feedbackText = '', feedbackClass = '';
     if (result === 'correct') {
-      const msgs = ['🎉 Верно!', '🌟 Отлично!', '🎊 Молодец!'];
-      feedbackText = msgs[att % msgs.length] || '🎉 Верно!';
+      const keys = ['feedback_correct_0', 'feedback_correct_1', 'feedback_correct_2'];
+      feedbackText = t(keys[att % keys.length]);
       feedbackClass = 'correct';
     } else if (result === 'wrong') {
-      feedbackText = `😢 Не получилось. Ответ: ${ex.ans}`;
+      feedbackText = t('feedback_wrong_reveal', { answer: ex.ans });
       feedbackClass = 'wrong';
     } else if (att > 0) {
       const left = MAX_ATTEMPTS - att;
-      feedbackText = left > 0 ? `🤔 Не то… осталось попыток: ${left}` : '';
+      feedbackText = left > 0 ? t('feedback_attempts_left', { left }) : '';
       feedbackClass = 'wrong';
     }
 
@@ -990,7 +984,7 @@
     area.innerHTML = `
       <div class="example-card" id="exampleCard">
         ${badge}
-        <div class="example-num">Пример ${currentIndex + 1} из ${examples.length}</div>
+        <div class="example-num">${t('example_counter', { current: currentIndex + 1, total: examples.length })}</div>
         <div class="mult-visual">
           <div class="mult-num factor-b">${ex.table}</div>
           <div class="mult-sign">×</div>
@@ -1001,13 +995,13 @@
         ${pipsHTML}
         <div class="input-area">
           <div class="input-group">
-            <span class="input-label">Ответ</span>
+            <span class="input-label">${t('input_label')}</span>
             <input type="number" class="answer-input ${inputClass}" id="inputAns"
               placeholder="?" value="${inputValue}" ${disabled} min="0" max="999">
           </div>
         </div>
         <button class="check-btn" id="checkBtn" onclick="checkAnswer()" ${disabled}>
-          ✔️ Проверить
+          ${t('check_btn')}
         </button>
         <div class="feedback ${feedbackClass}" id="feedback">${feedbackText}</div>
       </div>`;
@@ -1044,7 +1038,7 @@
     // Show / hide max-reached hint
     function refreshHint() {
       const reached = totalInBaskets() >= maxTotal;
-      hint.textContent = reached ? `Максимум достигнут (${maxTotal})` : '';
+      hint.textContent = reached ? t('drag_max_hint', { max: maxTotal }) : '';
     }
 
     // ── Source drag ──
@@ -1087,7 +1081,7 @@
         const chick = document.createElement('span');
         chick.className = 'chick-in-basket';
         chick.textContent = '🐣';
-        chick.title = 'Двойной клик — убрать';
+        chick.title = t('chick_remove_hint');
         chick.addEventListener('dblclick', () => {
           chick.remove();
           refreshCounter(basket);
@@ -1137,7 +1131,7 @@
         // Still has attempts — update pips + feedback inline without full re-render
         const left = MAX_ATTEMPTS - attempts[idx];
         const fb = document.getElementById('feedback');
-        if (fb) { fb.className = 'feedback wrong'; fb.textContent = `🤔 Не то… осталось попыток: ${left}`; }
+        if (fb) { fb.className = 'feedback wrong'; fb.textContent = t('feedback_attempts_left', { left }); }
         // Refresh pips
         const pipsContainer = document.querySelector('.attempts-row');
         if (pipsContainer) pipsContainer.outerHTML = buildAttemptPips(idx, null);
@@ -1160,7 +1154,7 @@
     document.getElementById('nextBtn').disabled = currentIndex === examples.length - 1;
   }
 
-  /* ── CONFETTI ── */
+  
   const CONFETTI_COLORS = ['#f4845f','#6bbf94','#74b3e8','#f9d56e','#c49de8','#f47c7c'];
 
   function launchConfetti() {
