@@ -18,5 +18,14 @@
   "basket_label_one": "🧺 {count} корзинка",
   "basket_label_few": "🧺 {count} корзинки",
   "basket_label_many": "🧺 {count} корзинок",
-  "empty_state_text": "Выбери число и нажми «Применить»,\nчтобы начать!"
+  "empty_state_text": "Выбери число и нажми «Применить»,\nчтобы начать!",
+  "table_btn_2": "÷ 2",
+  "table_btn_3": "÷ 3",
+  "table_btn_4": "÷ 4",
+  "table_btn_5": "÷ 5",
+  "table_btn_6": "÷ 6",
+  "table_btn_7": "÷ 7",
+  "table_btn_8": "÷ 8",
+  "table_btn_9": "÷ 9",
+  "table_btn_10": "÷ 10"
 }
