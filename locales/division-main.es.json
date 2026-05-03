@@ -18,5 +18,14 @@
   "basket_label_one": "🧺 {count} cesta",
   "basket_label_few": "🧺 {count} cestas",
   "basket_label_many": "🧺 {count} cestas",
-  "empty_state_text": "Elige un número y pulsa «Aplicar»\npara empezar."
+  "empty_state_text": "Elige un número y pulsa «Aplicar»\npara empezar.",
+  "table_btn_2": "÷ 2",
+  "table_btn_3": "÷ 3",
+  "table_btn_4": "÷ 4",
+  "table_btn_5": "÷ 5",
+  "table_btn_6": "÷ 6",
+  "table_btn_7": "÷ 7",
+  "table_btn_8": "÷ 8",
+  "table_btn_9": "÷ 9",
+  "table_btn_10": "÷ 10"
 }
