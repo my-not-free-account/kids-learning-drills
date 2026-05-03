@@ -21,5 +21,15 @@
   "drag_label": "🧺 {count} {bWord} — arrastra 🐣 a las cestas",
   "drag_source_label": "Arrastra un pollito",
   "drag_max_hint": "Máximo alcanzado ({max})",
-  "empty_state_text": "Elige una tabla y pulsa «Aplicar»\npara empezar."
+  "empty_state_text": "Elige una tabla y pulsa «Aplicar»\npara empezar.",
+  "table_btn_2": "÷ 2",
+  "table_btn_3": "÷ 3",
+  "table_btn_4": "÷ 4",
+  "table_btn_5": "÷ 5",
+  "table_btn_6": "÷ 6",
+  "table_btn_7": "÷ 7",
+  "table_btn_8": "÷ 8",
+  "table_btn_9": "÷ 9",
+  "table_btn_10": "÷ 10",
+  "chick_remove_hint": "Doble clic para quitar"
 }
