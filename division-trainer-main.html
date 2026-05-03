@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Тренажёр деления</title>
+<title></title>
+<script>const PAGE_KEY = 'division-main';</script>
+<script src="i18n/index.js" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -58,7 +60,7 @@
     margin-bottom: 28px;
   }
 
-  /* ── DECO ── */
+  
   .deco {
     position: fixed;
     pointer-events: none;
@@ -79,7 +81,7 @@
 
   .container { max-width: 700px; margin: 0 auto; }
 
-  /* ── SETTINGS ── */
+  
   .settings-card {
     background: var(--card);
     border: 1.5px solid var(--border);
@@ -147,7 +149,7 @@
   .apply-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(244,132,95,0.45); }
   .apply-btn:active { transform: translateY(0); }
 
-  /* ── PROGRESS ── */
+  
   .progress-section { margin-bottom: 20px; }
   .progress-header {
     display: flex;
@@ -195,7 +197,7 @@
     margin-right: 4px;
   }
 
-  /* ── EXAMPLE CARD ── */
+  
   .example-card {
     background: var(--card);
     border: 1.5px solid var(--border);
@@ -237,7 +239,7 @@
   .correct-badge { background: var(--accent-light); }
   .wrong-badge   { background: #fde8e8; }
 
-  /* ── DIVISION EXPRESSION ── */
+  
   .div-visual {
     display: flex;
     justify-content: center;
@@ -261,7 +263,7 @@
     line-height: 1;
   }
 
-  /* ── PASTURE ── */
+  
   .pasture-section {
     background: var(--accent-light);
     border: 2px solid var(--accent);
@@ -291,7 +293,7 @@
     min-height: 36px;
   }
 
-  /* ── BASKET SECTION ── */
+  
   .basket-section {
     background: var(--yellow-light);
     border: 2px solid var(--yellow);
@@ -348,7 +350,7 @@
     white-space: nowrap;
   }
 
-  /* ── CHICK ── */
+  
   .chick {
     font-size: 1.3rem;
     line-height: 1;
@@ -369,7 +371,7 @@
     100% { transform: scale(1); opacity: 1; }
   }
 
-  /* ── ATTEMPTS ── */
+  
   .attempts-row {
     display: flex;
     justify-content: center;
@@ -393,7 +395,7 @@
   .attempt-pip.used    { background: var(--wrong);   border-color: var(--wrong); }
   .attempt-pip.correct { background: var(--correct); border-color: var(--correct); }
 
-  /* ── INPUT ── */
+  
   .input-area {
     display: flex;
     gap: 16px;
@@ -434,7 +436,7 @@
   .answer-input.input-correct { border-color: var(--correct); background: var(--accent-light); }
   .answer-input.input-wrong   { border-color: var(--wrong);   background: #fde8e8; }
 
-  /* ── CHECK BUTTON ── */
+  
   .check-btn {
     display: block;
     width: 100%;
@@ -456,7 +458,7 @@
   .check-btn:active { transform: translateY(0); }
   .check-btn:disabled { opacity: 0.6; cursor: default; transform: none; }
 
-  /* ── FEEDBACK ── */
+  
   .feedback {
     text-align: center;
     font-family: 'Baloo 2', cursive;
@@ -468,7 +470,7 @@
   .feedback.correct { color: var(--correct); }
   .feedback.wrong   { color: var(--wrong); }
 
-  /* ── INSIGHT BLOCK ── */
+  
   .insight-block {
     margin-top: 16px;
     padding: 14px 20px;
@@ -495,7 +497,7 @@
   .insight-formula .div-part { color: var(--correct); }
   .insight-formula .mul-part { color: var(--primary); }
 
-  /* ── NAV ── */
+  
   .nav-buttons { display: flex; gap: 12px; justify-content: center; }
   .nav-btn {
     flex: 1;
@@ -523,7 +525,7 @@
   }
   .nav-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
 
-  /* ── CONFETTI ── */
+  
   .confetti-container {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
@@ -555,7 +557,7 @@
     100% { transform: translate(-50%,-60%) scale(0.8); opacity: 0; }
   }
 
-  /* ── EMPTY STATE ── */
+  
   .empty-state { text-align: center; padding: 48px 24px; color: var(--muted); }
   .empty-state .emoji { font-size: 3rem; margin-bottom: 12px; }
   .empty-state p { font-size: 1rem; font-weight: 600; }
@@ -572,52 +574,48 @@
 <div class="confetti-container" id="confettiContainer"></div>
 
 <div class="container">
-  <h1>➗ Тренажёр деления</h1>
-  <p class="subtitle">Выбери число</p>
+  <h1 data-i18n="h1"></h1>
+  <p class="subtitle" data-i18n="subtitle"></p>
 
-  <!-- SETTINGS -->
   <div class="settings-card">
-    <div class="settings-title">⚙️ Настройки</div>
-    <span class="table-label">На какое число делим?</span>
+    <div class="settings-title" data-i18n="settings_title"></div>
+    <span class="table-label" data-i18n="table_label"></span>
     <div class="table-buttons">
-      <button class="table-btn active" data-val="2"  onclick="selectTable(this)">на 2</button>
-      <button class="table-btn"        data-val="3"  onclick="selectTable(this)">на 3</button>
-      <button class="table-btn"        data-val="4"  onclick="selectTable(this)">на 4</button>
-      <button class="table-btn"        data-val="5"  onclick="selectTable(this)">на 5</button>
-      <button class="table-btn"        data-val="6"  onclick="selectTable(this)">на 6</button>
-      <button class="table-btn"        data-val="7"  onclick="selectTable(this)">на 7</button>
-      <button class="table-btn"        data-val="8"  onclick="selectTable(this)">на 8</button>
-      <button class="table-btn"        data-val="9"  onclick="selectTable(this)">на 9</button>
-      <button class="table-btn"        data-val="10" onclick="selectTable(this)">на 10</button>
+      <button class="table-btn active" data-val="2"  onclick="selectTable(this)" data-i18n="table_btn_2"></button>
+      <button class="table-btn"        data-val="3"  onclick="selectTable(this)" data-i18n="table_btn_3"></button>
+      <button class="table-btn"        data-val="4"  onclick="selectTable(this)" data-i18n="table_btn_4"></button>
+      <button class="table-btn"        data-val="5"  onclick="selectTable(this)" data-i18n="table_btn_5"></button>
+      <button class="table-btn"        data-val="6"  onclick="selectTable(this)" data-i18n="table_btn_6"></button>
+      <button class="table-btn"        data-val="7"  onclick="selectTable(this)" data-i18n="table_btn_7"></button>
+      <button class="table-btn"        data-val="8"  onclick="selectTable(this)" data-i18n="table_btn_8"></button>
+      <button class="table-btn"        data-val="9"  onclick="selectTable(this)" data-i18n="table_btn_9"></button>
+      <button class="table-btn"        data-val="10" onclick="selectTable(this)" data-i18n="table_btn_10"></button>
     </div>
-    <button class="apply-btn" onclick="applySettings()">🎯 Применить — новые 20 примеров</button>
+    <button class="apply-btn" onclick="applySettings()" data-i18n="apply_btn"></button>
   </div>
 
-  <!-- PROGRESS -->
   <div class="progress-section" id="progressSection" style="display:none">
     <div class="progress-header">
-      <span>Прогресс</span>
+      <span data-i18n="progress_label"></span>
       <span class="progress-counter" id="progressCounter">0 / 20</span>
     </div>
     <div class="progress-bar-track" id="progressBar"></div>
     <div class="progress-legend">
-      <span><span class="legend-dot" style="background:var(--correct)"></span>Правильно: <span id="correctCount">0</span></span>
-      <span><span class="legend-dot" style="background:var(--wrong)"></span>Неправильно: <span id="wrongCount">0</span></span>
+      <span><span class="legend-dot" style="background:var(--correct)"></span><span data-i18n="progress_correct"></span>: <span id="correctCount">0</span></span>
+      <span><span class="legend-dot" style="background:var(--wrong)"></span><span data-i18n="progress_wrong"></span>: <span id="wrongCount">0</span></span>
     </div>
   </div>
 
-  <!-- EXAMPLE AREA -->
   <div id="exampleArea">
     <div class="empty-state">
       <div class="emoji">🧮</div>
-      <p>Выбери число и нажми «Применить»,<br>чтобы начать!</p>
+      <p data-i18n="empty_state_text"></p>
     </div>
   </div>
 
-  <!-- NAV -->
   <div class="nav-buttons" id="navButtons" style="display:none">
-    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Назад</button>
-    <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Вперёд →</button>
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled data-i18n="nav_prev"></button>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)" data-i18n="nav_next"></button>
   </div>
 </div>
 
@@ -631,7 +629,7 @@
   let results      = []; // null | 'correct' | 'wrong'
   let attempts     = []; // wrong attempt count per example
 
-  /* ── SETTINGS ── */
+  
   function selectTable(btn) {
     document.querySelectorAll('.table-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -668,7 +666,7 @@
     renderCard();
   }
 
-  /* ── PROGRESS ── */
+  
   function renderProgress() {
     const track = document.getElementById('progressBar');
     track.innerHTML = '';
@@ -696,16 +694,16 @@
       else if (i < used) cls += ' used';
       html += `<div class="${cls}"></div>`;
     }
-    return `<div class="attempts-row">Попытки: <div class="attempt-pips">${html}</div></div>`;
+    return `<div class="attempts-row">${t('attempts_label')}: <div class="attempt-pips">${html}</div></div>`;
   }
 
   /* ── STATIC BASKETS (after answer) ── */
   function buildStaticBaskets(ex) {
     const { divisor, quotient, dividend } = ex;
     if (dividend > 100) return '';
-    const bWord = divisor === 1 ? 'корзинка' : divisor < 5 ? 'корзинки' : 'корзинок';
+    const bWord = divisor === 1 ? t('basket_label_one', { count: divisor }) : divisor < 5 ? t('basket_label_few', { count: divisor }) : t('basket_label_many', { count: divisor });
     let html = `<div class="basket-section">
-      <div class="basket-label">🧺 ${divisor} ${bWord}</div>
+      <div class="basket-label">${bWord}</div>
       <div class="basket-groups">`;
     for (let g = 0; g < divisor; g++) {
       html += `<div class="basket-group"><span class="basket-group-num">${g + 1}</span>`;
@@ -723,7 +721,7 @@
   function buildDragZones(ex) {
     const { divisor, dividend } = ex;
     if (dividend > 100) return '';
-    const bWord = divisor === 1 ? 'корзинка' : divisor < 5 ? 'корзинки' : 'корзинок';
+    const bWord = divisor === 1 ? t('basket_label_one', { count: divisor }) : divisor < 5 ? t('basket_label_few', { count: divisor }) : t('basket_label_many', { count: divisor });
 
     let chickHTML = '';
     for (let i = 0; i < dividend; i++)
@@ -737,11 +735,11 @@
 
     return `
       <div class="pasture-section drop-target" id="pastureZone">
-        <div class="pasture-label">🌿 Загон — все цыплята здесь (${dividend})</div>
+        <div class="pasture-label">${t('pasture_label', { count: dividend })}</div>
         <div class="pasture-chicks" id="pastureChicks">${chickHTML}</div>
       </div>
       <div class="basket-section">
-        <div class="basket-label">🧺 ${divisor} ${bWord} — перетащи цыплят</div>
+        <div class="basket-label">${bWord}</div>
         <div class="basket-groups" id="basketGroups">${basketHTML}</div>
       </div>`;
   }
@@ -815,22 +813,22 @@
 
     let feedbackText = '', feedbackClass = '';
     if (result === 'correct') {
-      feedbackText = '🎉 Верно!';
+      feedbackText = t('feedback_correct');
       feedbackClass = 'correct';
     } else if (result === 'wrong') {
-      feedbackText = `😢 Правильный ответ: ${ex.quotient}`;
+      feedbackText = t('feedback_wrong_reveal', { answer: ex.quotient });
       feedbackClass = 'wrong';
     } else if (att > 0) {
-      feedbackText = `🤔 Не то… осталось попыток: ${MAX_ATTEMPTS - att}`;
+      feedbackText = t('feedback_attempts_left', { left: MAX_ATTEMPTS - att });
       feedbackClass = 'wrong';
     }
 
     const insightHTML = done ? `
       <div class="insight-block">
-        <div class="insight-label">💡 Запомни связь</div>
+        <div class="insight-label">${t('insight_label')}</div>
         <div class="insight-formula">
-          <span class="div-part">${ex.dividend} ÷ ${ex.divisor} = ${ex.quotient}</span><br>
-          <span class="mul-part">${ex.quotient} × ${ex.divisor} = ${ex.dividend}</span>
+          <span class="div-part">${t('insight_division', { dividend: ex.dividend, divisor: ex.divisor, quotient: ex.quotient })}</span><br>
+          <span class="mul-part">${t('insight_multiplication', { quotient: ex.quotient, divisor: ex.divisor, dividend: ex.dividend })}</span>
         </div>
       </div>` : '';
 
@@ -839,7 +837,7 @@
     document.getElementById('exampleArea').innerHTML = `
       <div class="example-card" id="exampleCard">
         ${badge}
-        <div class="example-num">Пример ${currentIndex + 1} из ${TOTAL}</div>
+        <div class="example-num">${t('example_counter', { current: currentIndex + 1, total: TOTAL })}</div>
 
         <div class="div-visual">
           <div class="div-num dividend">${ex.dividend}</div>
@@ -853,13 +851,13 @@
 
         <div class="input-area">
           <div class="input-group">
-            <span class="input-label">Ответ</span>
+            <span class="input-label">${t('input_label')}</span>
             <input type="number" class="answer-input ${inputClass}" id="inputAns"
               placeholder="?" value="${done ? ex.quotient : ''}" ${disabled} min="0" max="999">
           </div>
         </div>
 
-        <button class="check-btn" onclick="checkAnswer()" ${disabled}>✔️ Проверить</button>
+        <button class="check-btn" onclick="checkAnswer()" ${disabled}>${t('check_btn')}</button>
 
         <div class="feedback ${feedbackClass}">${feedbackText}</div>
         ${insightHTML}
@@ -907,7 +905,7 @@
       } else {
         showEmoji('😟');
         const fb = document.querySelector('.feedback');
-        if (fb) { fb.className = 'feedback wrong'; fb.textContent = `🤔 Не то… осталось попыток: ${MAX_ATTEMPTS - attempts[idx]}`; }
+        if (fb) { fb.className = 'feedback wrong'; fb.textContent = t('feedback_attempts_left', { left: MAX_ATTEMPTS - attempts[idx] }); }
         const pipsRow = document.querySelector('.attempts-row');
         if (pipsRow) pipsRow.outerHTML = buildAttemptPips(idx, null);
         inp.value = '';
