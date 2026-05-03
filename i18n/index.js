@@ -350,6 +350,7 @@ async function _init() {
       ]);
       _strings = strings;
       _lang = I18N_DEFAULT_LANG;
+      localStorage.setItem(I18N_STORAGE_KEY, I18N_DEFAULT_LANG);
     } catch (fallbackErr) {
       console.error('[i18n] Fallback also failed:', fallbackErr);
       loader.hide();
