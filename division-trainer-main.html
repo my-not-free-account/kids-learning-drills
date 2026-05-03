@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тренажёр деления</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf6ee;
+    --card: #fff9f2;
+    --primary: #f4845f;
+    --primary-light: #fdddd3;
+    --accent: #6bbf94;
+    --accent-light: #d4f0e3;
+    --blue: #74b3e8;
+    --blue-light: #d8edfc;
+    --yellow: #f9d56e;
+    --yellow-light: #fef6d6;
+    --text: #3d3642;
+    --muted: #a09aab;
+    --border: #ecdfd4;
+    --correct: #6bbf94;
+    --wrong: #f47c7c;
+    --radius: 20px;
+    --radius-sm: 12px;
+    --shadow: 0 4px 24px rgba(100,60,30,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+    background-image:
+      radial-gradient(circle at 10% 10%, #fde6da55 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, #d4f0e355 0%, transparent 40%),
+      radial-gradient(circle at 60% 20%, #d8edfc44 0%, transparent 30%);
+  }
+
+  h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary);
+    text-align: center;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+  }
+
+  /* ── DECO ── */
+  .deco {
+    position: fixed;
+    pointer-events: none;
+    user-select: none;
+    font-size: 2.4rem;
+    opacity: 0.18;
+    animation: float 6s ease-in-out infinite;
+  }
+  .deco:nth-child(1) { top: 5%;    left: 3%;  animation-delay: 0s; }
+  .deco:nth-child(2) { top: 12%;   right: 5%; animation-delay: 1s;   font-size: 2rem; }
+  .deco:nth-child(3) { bottom: 8%; left: 6%;  animation-delay: 2s;   font-size: 1.8rem; }
+  .deco:nth-child(4) { bottom: 15%;right: 4%; animation-delay: 3s; }
+  .deco:nth-child(5) { top: 50%;   left: 1%;  animation-delay: 1.5s; font-size: 1.6rem; }
+  @keyframes float {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50%     { transform: translateY(-12px) rotate(5deg); }
+  }
+
+  .container { max-width: 700px; margin: 0 auto; }
+
+  /* ── SETTINGS ── */
+  .settings-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 28px;
+    margin-bottom: 28px;
+  }
+  .settings-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .table-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .table-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .table-btn {
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 52px;
+    text-align: center;
+  }
+  .table-btn:hover  { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+  .table-btn.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+
+  .apply-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: linear-gradient(135deg, var(--primary) 0%, #e8683e 100%);
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(244,132,95,0.35);
+    transition: all 0.2s ease;
+  }
+  .apply-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(244,132,95,0.45); }
+  .apply-btn:active { transform: translateY(0); }
+
+  /* ── PROGRESS ── */
+  .progress-section { margin-bottom: 20px; }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .progress-counter {
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .progress-bar-track {
+    height: 14px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+    display: flex;
+    gap: 2px;
+  }
+  .progress-segment {
+    flex: 1;
+    background: #ecdfd4;
+    border-radius: 99px;
+    transition: background 0.4s ease;
+  }
+  .progress-segment.correct { background: var(--correct); }
+  .progress-segment.wrong   { background: var(--wrong); }
+  .progress-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .legend-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-right: 4px;
+  }
+
+  /* ── EXAMPLE CARD ── */
+  .example-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px 28px 28px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+  }
+  .example-card.shake { animation: shake 0.4s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%     { transform: translateX(-8px); }
+    40%     { transform: translateX(8px); }
+    60%     { transform: translateX(-5px); }
+    80%     { transform: translateX(5px); }
+  }
+  .example-card.glow-correct { box-shadow: 0 0 0 3px var(--correct), var(--shadow); }
+  .example-card.glow-wrong   { box-shadow: 0 0 0 3px var(--wrong),   var(--shadow); }
+
+  .example-num {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+  }
+  .card-badge {
+    position: absolute;
+    top: 20px; right: 20px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+  }
+  .correct-badge { background: var(--accent-light); }
+  .wrong-badge   { background: #fde8e8; }
+
+  /* ── DIVISION EXPRESSION ── */
+  .div-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .div-num {
+    font-family: 'Baloo 2', cursive;
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .div-num.dividend { color: var(--text); }
+  .div-num.divisor  { color: var(--primary); }
+  .div-sign, .equals-sign {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--muted);
+    line-height: 1;
+  }
+
+  /* ── PASTURE ── */
+  .pasture-section {
+    background: var(--accent-light);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 12px 16px 14px;
+    margin-bottom: 16px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .pasture-section.drag-over {
+    border-color: var(--correct);
+    background: #b8e4cc;
+  }
+  .pasture-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #2e7a52;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .pasture-chicks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    min-height: 36px;
+  }
+
+  /* ── BASKET SECTION ── */
+  .basket-section {
+    background: var(--yellow-light);
+    border: 2px solid var(--yellow);
+    border-radius: var(--radius);
+    padding: 16px 16px 20px;
+    margin-bottom: 24px;
+  }
+  .basket-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #b8860b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .basket-groups {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .basket-group {
+    background: white;
+    border: 2px solid #f9d56e;
+    border-radius: 14px;
+    padding: 8px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    justify-content: center;
+    min-width: 52px;
+    min-height: 52px;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(200,160,0,0.10);
+    position: relative;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .basket-group.drag-over {
+    border-color: var(--blue);
+    background: var(--blue-light);
+  }
+  .basket-group-num {
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--yellow);
+    border-radius: 99px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #7a5900;
+    padding: 1px 7px;
+    white-space: nowrap;
+  }
+
+  /* ── CHICK ── */
+  .chick {
+    font-size: 1.3rem;
+    line-height: 1;
+    display: inline-block;
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  .chick:hover    { transform: scale(1.2); }
+  .chick.dragging { opacity: 0.3; transform: scale(0.85); cursor: grabbing; }
+  .chick.static   {
+    cursor: default;
+    animation: chickPop 0.35s ease both;
+  }
+  @keyframes chickPop {
+    0%   { transform: scale(0); opacity: 0; }
+    70%  { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* ── ATTEMPTS ── */
+  .attempts-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .attempt-pips { display: flex; gap: 6px; }
+  .attempt-pip {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: white;
+    transition: all 0.25s ease;
+  }
+  .attempt-pip.used    { background: var(--wrong);   border-color: var(--wrong); }
+  .attempt-pip.correct { background: var(--correct); border-color: var(--correct); }
+
+  /* ── INPUT ── */
+  .input-area {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .input-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .answer-input {
+    width: 120px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 2.5px solid var(--border);
+    background: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text);
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield;
+  }
+  .answer-input::-webkit-inner-spin-button,
+  .answer-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .answer-input:focus         { border-color: var(--blue);    box-shadow: 0 0 0 3px var(--blue-light); }
+  .answer-input.input-correct { border-color: var(--correct); background: var(--accent-light); }
+  .answer-input.input-wrong   { border-color: var(--wrong);   background: #fde8e8; }
+
+  /* ── CHECK BUTTON ── */
+  .check-btn {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: linear-gradient(135deg, var(--accent) 0%, #4aaa7a 100%);
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(107,191,148,0.35);
+    transition: all 0.2s ease;
+  }
+  .check-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(107,191,148,0.45); }
+  .check-btn:active { transform: translateY(0); }
+  .check-btn:disabled { opacity: 0.6; cursor: default; transform: none; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    text-align: center;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.3rem;
+    font-weight: 800;
+    min-height: 44px;
+    margin-top: 16px;
+  }
+  .feedback.correct { color: var(--correct); }
+  .feedback.wrong   { color: var(--wrong); }
+
+  /* ── INSIGHT BLOCK ── */
+  .insight-block {
+    margin-top: 16px;
+    padding: 14px 20px;
+    background: var(--blue-light);
+    border: 2px solid var(--blue);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+  .insight-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .insight-formula {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .insight-formula .div-part { color: var(--correct); }
+  .insight-formula .mul-part { color: var(--primary); }
+
+  /* ── NAV ── */
+  .nav-buttons { display: flex; gap: 12px; justify-content: center; }
+  .nav-btn {
+    flex: 1;
+    max-width: 180px;
+    padding: 13px 20px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    color: var(--blue);
+    transform: translateY(-2px);
+  }
+  .nav-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+  /* ── CONFETTI ── */
+  .confetti-container {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+  .emoji-burst {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5rem;
+    pointer-events: none;
+    z-index: 1001;
+    animation: emojiBurst 1.2s ease forwards;
+  }
+  @keyframes emojiBurst {
+    0%   { transform: translate(-50%,-50%) scale(0.2); opacity: 0; }
+    30%  { transform: translate(-50%,-50%) scale(1.3); opacity: 1; }
+    70%  { transform: translate(-50%,-50%) scale(1);   opacity: 1; }
+    100% { transform: translate(-50%,-60%) scale(0.8); opacity: 0; }
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align: center; padding: 48px 24px; color: var(--muted); }
+  .empty-state .emoji { font-size: 3rem; margin-bottom: 12px; }
+  .empty-state p { font-size: 1rem; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="deco">✏️</div>
+<div class="deco">🌟</div>
+<div class="deco">🎒</div>
+<div class="deco">🍎</div>
+<div class="deco">📐</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="container">
+  <h1>➗ Тренажёр деления</h1>
+  <p class="subtitle">Выбери число</p>
+
+  <!-- SETTINGS -->
+  <div class="settings-card">
+    <div class="settings-title">⚙️ Настройки</div>
+    <span class="table-label">На какое число делим?</span>
+    <div class="table-buttons">
+      <button class="table-btn active" data-val="2"  onclick="selectTable(this)">на 2</button>
+      <button class="table-btn"        data-val="3"  onclick="selectTable(this)">на 3</button>
+      <button class="table-btn"        data-val="4"  onclick="selectTable(this)">на 4</button>
+      <button class="table-btn"        data-val="5"  onclick="selectTable(this)">на 5</button>
+      <button class="table-btn"        data-val="6"  onclick="selectTable(this)">на 6</button>
+      <button class="table-btn"        data-val="7"  onclick="selectTable(this)">на 7</button>
+      <button class="table-btn"        data-val="8"  onclick="selectTable(this)">на 8</button>
+      <button class="table-btn"        data-val="9"  onclick="selectTable(this)">на 9</button>
+      <button class="table-btn"        data-val="10" onclick="selectTable(this)">на 10</button>
+    </div>
+    <button class="apply-btn" onclick="applySettings()">🎯 Применить — новые 20 примеров</button>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section" id="progressSection" style="display:none">
+    <div class="progress-header">
+      <span>Прогресс</span>
+      <span class="progress-counter" id="progressCounter">0 / 20</span>
+    </div>
+    <div class="progress-bar-track" id="progressBar"></div>
+    <div class="progress-legend">
+      <span><span class="legend-dot" style="background:var(--correct)"></span>Правильно: <span id="correctCount">0</span></span>
+      <span><span class="legend-dot" style="background:var(--wrong)"></span>Неправильно: <span id="wrongCount">0</span></span>
+    </div>
+  </div>
+
+  <!-- EXAMPLE AREA -->
+  <div id="exampleArea">
+    <div class="empty-state">
+      <div class="emoji">🧮</div>
+      <p>Выбери число и нажми «Применить»,<br>чтобы начать!</p>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-buttons" id="navButtons" style="display:none">
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Назад</button>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Вперёд →</button>
+  </div>
+</div>
+
+<script>
+  const TOTAL        = 20;
+  const MAX_ATTEMPTS = 5;
+
+  let selectedDivisor = 2;
+  let examples     = [];
+  let currentIndex = 0;
+  let results      = []; // null | 'correct' | 'wrong'
+  let attempts     = []; // wrong attempt count per example
+
+  /* ── SETTINGS ── */
+  function selectTable(btn) {
+    document.querySelectorAll('.table-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedDivisor = parseInt(btn.dataset.val);
+  }
+
+  /* ── GENERATE ──
+     divisor  = selectedDivisor (fixed, shown as divisor)
+     quotient = 1–10  →  dividend = quotient × divisor
+     Duplicate pool (2×10 = 20), shuffle
+  */
+  function generateExamples() {
+    const d = selectedDivisor;
+    const pool = [];
+    for (let pass = 0; pass < 2; pass++)
+      for (let q = 1; q <= 10; q++)
+        pool.push({ quotient: q, divisor: d, dividend: q * d });
+    // Fisher-Yates
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, TOTAL);
+  }
+
+  function applySettings() {
+    examples     = generateExamples();
+    results      = new Array(TOTAL).fill(null);
+    attempts     = new Array(TOTAL).fill(0);
+    currentIndex = 0;
+    document.getElementById('progressSection').style.display = 'block';
+    document.getElementById('navButtons').style.display      = 'flex';
+    renderProgress();
+    renderCard();
+  }
+
+  /* ── PROGRESS ── */
+  function renderProgress() {
+    const track = document.getElementById('progressBar');
+    track.innerHTML = '';
+    let correct = 0, wrong = 0;
+    results.forEach(r => {
+      const seg = document.createElement('div');
+      seg.className = 'progress-segment';
+      if (r === 'correct') { seg.classList.add('correct'); correct++; }
+      else if (r === 'wrong') { seg.classList.add('wrong'); wrong++; }
+      track.appendChild(seg);
+    });
+    const answered = results.filter(r => r !== null).length;
+    document.getElementById('progressCounter').textContent = `${answered} / ${TOTAL}`;
+    document.getElementById('correctCount').textContent    = correct;
+    document.getElementById('wrongCount').textContent      = wrong;
+  }
+
+  /* ── ATTEMPT PIPS ── */
+  function buildAttemptPips(idx, resultVal) {
+    const used = attempts[idx];
+    let html = '';
+    for (let i = 0; i < MAX_ATTEMPTS; i++) {
+      let cls = 'attempt-pip';
+      if (resultVal === 'correct' && i === 0) cls += ' correct';
+      else if (i < used) cls += ' used';
+      html += `<div class="${cls}"></div>`;
+    }
+    return `<div class="attempts-row">Попытки: <div class="attempt-pips">${html}</div></div>`;
+  }
+
+  /* ── STATIC BASKETS (after answer) ── */
+  function buildStaticBaskets(ex) {
+    const { divisor, quotient, dividend } = ex;
+    if (dividend > 100) return '';
+    const bWord = divisor === 1 ? 'корзинка' : divisor < 5 ? 'корзинки' : 'корзинок';
+    let html = `<div class="basket-section">
+      <div class="basket-label">🧺 ${divisor} ${bWord}</div>
+      <div class="basket-groups">`;
+    for (let g = 0; g < divisor; g++) {
+      html += `<div class="basket-group"><span class="basket-group-num">${g + 1}</span>`;
+      for (let c = 0; c < quotient; c++) {
+        const delay = (g * quotient + c) * 50;
+        html += `<span class="chick static" style="animation-delay:${delay}ms">🐣</span>`;
+      }
+      html += `</div>`;
+    }
+    html += `</div></div>`;
+    return html;
+  }
+
+  /* ── DRAG & DROP ZONES (before answer) ── */
+  function buildDragZones(ex) {
+    const { divisor, dividend } = ex;
+    if (dividend > 100) return '';
+    const bWord = divisor === 1 ? 'корзинка' : divisor < 5 ? 'корзинки' : 'корзинок';
+
+    let chickHTML = '';
+    for (let i = 0; i < dividend; i++)
+      chickHTML += `<span class="chick" draggable="true" data-id="${i}">🐣</span>`;
+
+    let basketHTML = '';
+    for (let g = 0; g < divisor; g++)
+      basketHTML += `<div class="basket-group drop-target" data-basket="${g}">
+        <span class="basket-group-num">${g + 1}</span>
+      </div>`;
+
+    return `
+      <div class="pasture-section drop-target" id="pastureZone">
+        <div class="pasture-label">🌿 Загон — все цыплята здесь (${dividend})</div>
+        <div class="pasture-chicks" id="pastureChicks">${chickHTML}</div>
+      </div>
+      <div class="basket-section">
+        <div class="basket-label">🧺 ${divisor} ${bWord} — перетащи цыплят</div>
+        <div class="basket-groups" id="basketGroups">${basketHTML}</div>
+      </div>`;
+  }
+
+  /* ── DRAG & DROP LOGIC ── */
+  function initDragDrop(ex) {
+    if (ex.dividend > 100) return;
+
+    let draggedChick = null;
+    const card = document.getElementById('exampleCard');
+
+    // Delegate dragstart to the card — works for chicks anywhere (pasture or baskets)
+    card.addEventListener('dragstart', e => {
+      const chick = e.target.closest('.chick');
+      if (!chick) return;
+      draggedChick = chick;
+      e.dataTransfer.effectAllowed = 'move';
+      requestAnimationFrame(() => draggedChick && draggedChick.classList.add('dragging'));
+    });
+
+    card.addEventListener('dragend', () => {
+      if (draggedChick) draggedChick.classList.remove('dragging');
+      draggedChick = null;
+      card.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    });
+
+    // Helper: register any element as a drop zone
+    function makeDropZone(el, getContainer) {
+      el.addEventListener('dragover',  e => { e.preventDefault(); el.classList.add('drag-over'); });
+      el.addEventListener('dragleave', e => {
+        // Only remove if leaving to outside this element
+        if (!el.contains(e.relatedTarget)) el.classList.remove('drag-over');
+      });
+      el.addEventListener('drop', e => {
+        e.preventDefault();
+        el.classList.remove('drag-over');
+        if (!draggedChick) return;
+        const container = getContainer(el);
+        if (container && !container.contains(draggedChick)) {
+          container.appendChild(draggedChick);
+        }
+        draggedChick.classList.remove('dragging');
+        draggedChick = null;
+      });
+    }
+
+    // Pasture zone → drop into #pastureChicks
+    const pastureZone = document.getElementById('pastureZone');
+    if (pastureZone) makeDropZone(pastureZone, () => document.getElementById('pastureChicks'));
+
+    // Each basket → drop directly into the basket-group element
+    const basketGroups = document.getElementById('basketGroups');
+    if (basketGroups) {
+      basketGroups.querySelectorAll('.basket-group').forEach(b => makeDropZone(b, el => el));
+    }
+  }
+
+  /* ── RENDER CARD ── */
+  function renderCard() {
+    const ex     = examples[currentIndex];
+    const result = results[currentIndex];
+    const att    = attempts[currentIndex];
+    const done   = result !== null;
+
+    const disabled   = done ? 'disabled' : '';
+    const inputClass = result === 'correct' ? 'input-correct' : (done ? 'input-wrong' : '');
+
+    let badge = '';
+    if (result === 'correct') badge = `<div class="card-badge correct-badge">✅</div>`;
+    else if (result === 'wrong') badge = `<div class="card-badge wrong-badge">❌</div>`;
+
+    let feedbackText = '', feedbackClass = '';
+    if (result === 'correct') {
+      feedbackText = '🎉 Верно!';
+      feedbackClass = 'correct';
+    } else if (result === 'wrong') {
+      feedbackText = `😢 Правильный ответ: ${ex.quotient}`;
+      feedbackClass = 'wrong';
+    } else if (att > 0) {
+      feedbackText = `🤔 Не то… осталось попыток: ${MAX_ATTEMPTS - att}`;
+      feedbackClass = 'wrong';
+    }
+
+    const insightHTML = done ? `
+      <div class="insight-block">
+        <div class="insight-label">💡 Запомни связь</div>
+        <div class="insight-formula">
+          <span class="div-part">${ex.dividend} ÷ ${ex.divisor} = ${ex.quotient}</span><br>
+          <span class="mul-part">${ex.quotient} × ${ex.divisor} = ${ex.dividend}</span>
+        </div>
+      </div>` : '';
+
+    const visualHTML = done ? buildStaticBaskets(ex) : buildDragZones(ex);
+
+    document.getElementById('exampleArea').innerHTML = `
+      <div class="example-card" id="exampleCard">
+        ${badge}
+        <div class="example-num">Пример ${currentIndex + 1} из ${TOTAL}</div>
+
+        <div class="div-visual">
+          <div class="div-num dividend">${ex.dividend}</div>
+          <div class="div-sign">÷</div>
+          <div class="div-num divisor">${ex.divisor}</div>
+          <div class="equals-sign">=</div>
+        </div>
+
+        ${visualHTML}
+        ${buildAttemptPips(currentIndex, result)}
+
+        <div class="input-area">
+          <div class="input-group">
+            <span class="input-label">Ответ</span>
+            <input type="number" class="answer-input ${inputClass}" id="inputAns"
+              placeholder="?" value="${done ? ex.quotient : ''}" ${disabled} min="0" max="999">
+          </div>
+        </div>
+
+        <button class="check-btn" onclick="checkAnswer()" ${disabled}>✔️ Проверить</button>
+
+        <div class="feedback ${feedbackClass}">${feedbackText}</div>
+        ${insightHTML}
+      </div>`;
+
+    if (!done) {
+      const inp = document.getElementById('inputAns');
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+      inp.focus();
+      initDragDrop(ex);
+    }
+
+    updateNavBtns();
+  }
+
+  /* ── CHECK ANSWER ── */
+  function checkAnswer() {
+    const ex  = examples[currentIndex];
+    const idx = currentIndex;
+    if (results[idx] !== null) return;
+
+    const inp = document.getElementById('inputAns');
+    const val = parseInt(inp.value);
+    if (isNaN(val) || inp.value === '') { inp.focus(); return; }
+
+    const card = document.getElementById('exampleCard');
+
+    if (val === ex.quotient) {
+      results[idx] = 'correct';
+      renderProgress();
+      card.classList.add('glow-correct');
+      launchConfetti();
+      showEmoji('🎉');
+      setTimeout(() => renderCard(), 700);
+    } else {
+      attempts[idx]++;
+      card.classList.add('shake');
+      setTimeout(() => card.classList.remove('shake'), 450);
+
+      if (attempts[idx] >= MAX_ATTEMPTS) {
+        results[idx] = 'wrong';
+        renderProgress();
+        showEmoji('😢');
+        setTimeout(() => renderCard(), 700);
+      } else {
+        showEmoji('😟');
+        const fb = document.querySelector('.feedback');
+        if (fb) { fb.className = 'feedback wrong'; fb.textContent = `🤔 Не то… осталось попыток: ${MAX_ATTEMPTS - attempts[idx]}`; }
+        const pipsRow = document.querySelector('.attempts-row');
+        if (pipsRow) pipsRow.outerHTML = buildAttemptPips(idx, null);
+        inp.value = '';
+        inp.classList.add('input-wrong');
+        setTimeout(() => { inp.classList.remove('input-wrong'); inp.focus(); }, 500);
+      }
+    }
+  }
+
+  /* ── NAVIGATION ── */
+  function navigate(dir) {
+    const next = currentIndex + dir;
+    if (next < 0 || next >= examples.length) return;
+    currentIndex = next;
+    renderCard();
+  }
+
+  function updateNavBtns() {
+    document.getElementById('prevBtn').disabled = currentIndex === 0;
+    document.getElementById('nextBtn').disabled = currentIndex === examples.length - 1;
+  }
+
+  /* ── CONFETTI & EMOJI ── */
+  const CONFETTI_COLORS = ['#f4845f','#6bbf94','#74b3e8','#f9d56e','#c49de8','#f47c7c'];
+
+  function launchConfetti() {
+    const c = document.getElementById('confettiContainer');
+    for (let i = 0; i < 60; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.left             = Math.random() * 100 + 'vw';
+      p.style.top              = '-20px';
+      p.style.background       = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+      p.style.width            = (8 + Math.random() * 8) + 'px';
+      p.style.height           = (8 + Math.random() * 8) + 'px';
+      p.style.borderRadius     = Math.random() > 0.5 ? '50%' : '2px';
+      p.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+      p.style.animationDelay   = (Math.random() * 0.5) + 's';
+      c.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
+    }
+  }
+
+  function showEmoji(emoji) {
+    const el = document.createElement('div');
+    el.className   = 'emoji-burst';
+    el.textContent = emoji;
+    document.body.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+  }
+</script>
+</body>
+</html>

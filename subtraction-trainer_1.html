@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вычитание столбиком — Тренажёр</title>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef6fb;
+    --card: #f8fdff;
+    --primary: #5b9fd6;
+    --primary-light: #d6ecf9;
+    --accent: #e87c6b;
+    --accent-light: #fde8e5;
+    --green: #62c08a;
+    --green-light: #d6f2e4;
+    --yellow: #f5c842;
+    --yellow-light: #fef7d6;
+    --purple: #a98de8;
+    --purple-light: #ece5fc;
+    --text: #2e3a4a;
+    --muted: #8fa4b8;
+    --border: #cde2f0;
+    --correct: #62c08a;
+    --wrong: #e87c6b;
+    --radius: 22px;
+    --radius-sm: 14px;
+    --shadow: 0 4px 28px rgba(50,90,130,0.09);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Comfortaa', cursive;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 28px 16px 56px;
+    background-image:
+      radial-gradient(ellipse at 15% 0%, #d6ecf966 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 90%, #d6f2e466 0%, transparent 45%),
+      radial-gradient(ellipse at 70% 10%, #ece5fc44 0%, transparent 35%);
+  }
+
+  /* ── DECO ── */
+  .deco {
+    position: fixed;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.16;
+    animation: floatDeco 7s ease-in-out infinite;
+    font-size: 2.2rem;
+  }
+  .deco:nth-child(1){ top:4%; left:2%; animation-delay:0s; }
+  .deco:nth-child(2){ top:10%; right:3%; font-size:1.9rem; animation-delay:1.2s; }
+  .deco:nth-child(3){ bottom:10%; left:4%; font-size:1.7rem; animation-delay:2.4s; }
+  .deco:nth-child(4){ bottom:18%; right:3%; animation-delay:3.5s; }
+  .deco:nth-child(5){ top:48%; left:1%; font-size:1.5rem; animation-delay:1.8s; }
+  @keyframes floatDeco {
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-14px) rotate(6deg); }
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 680px; margin: 0 auto; }
+
+  h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.1rem;
+    color: var(--primary);
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 28px;
+    font-weight: 600;
+  }
+
+  /* ── SETTINGS ── */
+  .settings-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px 26px 24px;
+    margin-bottom: 26px;
+  }
+  .settings-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.05rem;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  @media(max-width:500px){ .settings-grid{ grid-template-columns:1fr; } }
+
+  .setting-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+  }
+
+  /* Mode toggle */
+  .mode-toggle { display: flex; gap: 8px; }
+  .mode-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: white;
+    font-family: 'Comfortaa', cursive;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .mode-btn.active {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+  }
+
+  /* Range */
+  .range-display {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.15rem;
+    color: var(--primary);
+    margin-bottom: 6px;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%; height: 6px;
+    border-radius: 4px;
+    background: var(--border);
+    outline: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(91,159,214,0.4);
+    transition: transform 0.15s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.18); }
+
+  /* Apply btn */
+  .apply-btn {
+    width: 100%; padding: 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: linear-gradient(135deg, var(--primary) 0%, #3a82be 100%);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.05rem;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(91,159,214,0.38);
+    transition: all 0.2s;
+  }
+  .apply-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(91,159,214,0.48); }
+  .apply-btn:active { transform: translateY(0); }
+
+  /* ── PROGRESS ── */
+  .progress-section { margin-bottom: 20px; }
+  .progress-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.78rem; font-weight: 700; color: var(--muted);
+  }
+  .progress-counter {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.95rem; color: var(--text);
+  }
+  .progress-bar-track {
+    height: 14px; background: var(--border);
+    border-radius: 99px; overflow: hidden;
+    display: flex; gap: 3px;
+  }
+  .progress-segment {
+    flex: 1; background: #c8dfee;
+    border-radius: 99px; transition: background 0.4s;
+  }
+  .progress-segment.correct { background: var(--correct); }
+  .progress-segment.wrong   { background: var(--wrong); }
+  .progress-legend {
+    display: flex; gap: 16px; margin-top: 8px;
+    font-size: 0.75rem; font-weight: 700; color: var(--muted);
+  }
+  .legend-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%; margin-right: 4px;
+  }
+
+  /* ── EXAMPLE CARD ── */
+  .example-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 26px 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+  }
+  .example-card.shake { animation: shake 0.42s ease; }
+  @keyframes shake {
+    0%,100%{ transform: translateX(0); }
+    20%{ transform: translateX(-8px); }
+    40%{ transform: translateX(8px); }
+    60%{ transform: translateX(-5px); }
+    80%{ transform: translateX(5px); }
+  }
+  .example-card.glow-correct { box-shadow: 0 0 0 3px var(--correct), var(--shadow); }
+  .example-card.glow-wrong   { box-shadow: 0 0 0 3px var(--wrong),   var(--shadow); }
+
+  .example-num {
+    font-size: 0.75rem; font-weight: 700;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.6px; margin-bottom: 18px;
+  }
+
+  /* Card badge */
+  .card-badge {
+    position: absolute; top: 20px; right: 20px;
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+  }
+  .correct-badge { background: var(--green-light); }
+  .wrong-badge   { background: var(--accent-light); }
+
+  /* ── BORROW INDICATOR ── */
+  .borrow-badge {
+    display: inline-block;
+    background: var(--yellow-light);
+    border: 1.5px solid var(--yellow);
+    color: #b28a00;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 3px 10px;
+    margin-bottom: 16px;
+  }
+
+  /* ── INLINE EXPRESSION ── */
+  .inline-expr {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .ie-minuend { font-family:'Fredoka One',cursive; font-size:clamp(1.8rem,6vw,2.6rem); color:var(--text); }
+  .ie-minus   { font-family:'Fredoka One',cursive; font-size:2rem; color:var(--accent); }
+  .ie-sub     { font-family:'Fredoka One',cursive; font-size:clamp(1.8rem,6vw,2.6rem); color:var(--accent); }
+  .ie-eq      { font-family:'Fredoka One',cursive; font-size:2rem; color:var(--muted); }
+  .ie-q       { font-family:'Fredoka One',cursive; font-size:clamp(1.8rem,6vw,2.6rem); color:var(--primary); }
+
+  .inline-labels {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 20px;
+  }
+  .il-item {
+    font-size: 0.66rem; font-weight: 700;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.3px; text-align: center;
+  }
+  /* widths mirror the numbers above — set via JS inline style */
+
+  /* ── COLUMN SUBTRACTION ── */
+  .col-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .col-grid {
+    display: inline-grid;
+    /* columns: sign + digit cells — set dynamically */
+    gap: 0;
+    align-items: end;
+  }
+
+  /* digit-label row at top */
+  .col-header-cell {
+    font-size: 0.62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.3px;
+    color: var(--muted);
+    text-align: center;
+    padding-bottom: 6px;
+  }
+  .col-header-sign { /* empty placeholder for sign column */ }
+
+  /* digit cell */
+  .dcell {
+    width: 3rem; height: 3.4rem;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    line-height: 1;
+  }
+  .dcell.minuend-digit  { color: var(--text); }
+  .dcell.subtra-digit   { color: var(--accent); }
+  .dcell.empty          { color: transparent; }
+
+  /* sign cell */
+  .sign-cell {
+    width: 2.4rem; height: 3.4rem;
+    display: flex; align-items: center; justify-content: flex-end;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem; color: var(--accent);
+    padding-right: 4px;
+  }
+  .sign-cell.empty-sign { /* spacer */ }
+
+  /* underline spans full digit area */
+  .col-underline {
+    border-top: 3px solid var(--border);
+    border-radius: 2px;
+    margin: 3px 0 0;
+  }
+
+  /* ── INPUT ── */
+  .input-area {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .input-group {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 5px;
+  }
+  .input-label {
+    font-size: 0.7rem; font-weight: 700;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .answer-input {
+    width: 110px; padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 2.5px solid var(--border);
+    background: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.9rem;
+    color: var(--text);
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield;
+  }
+  .answer-input::-webkit-inner-spin-button,
+  .answer-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .answer-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+  .answer-input.input-correct {
+    border-color: var(--correct); background: var(--green-light);
+  }
+  .answer-input.input-wrong {
+    border-color: var(--wrong); background: var(--accent-light);
+  }
+
+  /* ── CHECK BUTTON ── */
+  .check-btn {
+    display: block; width: 100%; max-width: 260px;
+    margin: 0 auto;
+    padding: 13px; border-radius: var(--radius-sm); border: none;
+    background: linear-gradient(135deg, var(--green) 0%, #42a870 100%);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.05rem; letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(98,192,138,0.38);
+    transition: all 0.2s;
+  }
+  .check-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(98,192,138,0.48); }
+  .check-btn:active { transform: translateY(0); }
+  .check-btn:disabled { opacity: 0.6; cursor: default; transform: none; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    text-align: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.35rem;
+    min-height: 44px;
+    margin-top: 14px;
+    transition: all 0.3s;
+    line-height: 1.3;
+  }
+  .feedback.correct { color: var(--correct); }
+  .feedback.wrong   { color: var(--wrong); }
+
+  /* ── ATTEMPT DOTS ── */
+  .attempt-dots {
+    display: flex; justify-content: center;
+    gap: 8px; margin-bottom: 16px;
+  }
+  .attempt-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--border);
+    transition: background 0.25s, transform 0.2s;
+  }
+  .attempt-dot.used { background: var(--wrong); transform: scale(1.2); }
+
+  /* ── NAV ── */
+  .nav-buttons { display: flex; gap: 12px; justify-content: center; }
+  .nav-btn {
+    flex: 1; max-width: 180px;
+    padding: 13px 20px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: white;
+    font-family: 'Comfortaa', cursive;
+    font-size: 0.95rem; font-weight: 700;
+    color: var(--text); cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+  .nav-btn:disabled { opacity: 0.38; cursor: default; transform: none; }
+
+  /* ── CONFETTI ── */
+  .confetti-container {
+    position: fixed; top:0; left:0;
+    width:100%; height:100%;
+    pointer-events:none; z-index:1000; overflow:hidden;
+  }
+  .confetti-piece {
+    position: absolute; border-radius: 2px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0%  { transform: translateY(-20px) rotate(0deg); opacity:1; }
+    100%{ transform: translateY(110vh)  rotate(720deg); opacity:0; }
+  }
+  .emoji-burst {
+    position: fixed; top:50%; left:50%;
+    transform: translate(-50%,-50%);
+    font-size: 5rem; pointer-events:none; z-index:1001;
+    animation: emojiBurst 1.2s ease forwards;
+  }
+  @keyframes emojiBurst {
+    0%  { transform: translate(-50%,-50%) scale(0.2); opacity:0; }
+    30% { transform: translate(-50%,-50%) scale(1.3); opacity:1; }
+    70% { transform: translate(-50%,-50%) scale(1);   opacity:1; }
+    100%{ transform: translate(-50%,-60%) scale(0.8); opacity:0; }
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center; padding: 52px 24px;
+    color: var(--muted);
+  }
+  .empty-state .emoji { font-size: 3.2rem; margin-bottom: 14px; }
+  .empty-state p { font-size: 1rem; font-weight: 600; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="deco">✏️</div>
+<div class="deco">⭐</div>
+<div class="deco">🎒</div>
+<div class="deco">🍎</div>
+<div class="deco">📏</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="container">
+  <h1>➖ Вычитание столбиком</h1>
+  <p class="subtitle">Тренажёр для 3–4 класса</p>
+
+  <!-- SETTINGS -->
+  <div class="settings-card">
+    <div class="settings-title">⚙️ Настройки</div>
+    <div class="settings-grid">
+      <!-- Mode -->
+      <div class="setting-group">
+        <label>Тип примеров</label>
+        <div class="mode-toggle">
+          <button class="mode-btn active" id="modeNoBorrow" onclick="setMode('noBorrow')">
+            Без перехода<br>через разряд
+          </button>
+          <button class="mode-btn" id="modeBorrow" onclick="setMode('borrow')">
+            С переходом<br>через разряд
+          </button>
+        </div>
+      </div>
+      <!-- Max -->
+      <div class="setting-group">
+        <label>Уменьшаемое (до)</label>
+        <div class="range-display" id="maxDisplay">до 99</div>
+        <input type="range" id="maxRange" min="20" max="999" value="99" step="1"
+          oninput="document.getElementById('maxDisplay').textContent = 'до ' + this.value">
+      </div>
+    </div>
+    <button class="apply-btn" onclick="applySettings()">🎯 Применить — новые 10 примеров</button>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section" id="progressSection" style="display:none">
+    <div class="progress-header">
+      <span>Прогресс</span>
+      <span class="progress-counter" id="progressCounter">0 / 10</span>
+    </div>
+    <div class="progress-bar-track" id="progressBar"></div>
+    <div class="progress-legend">
+      <span><span class="legend-dot" style="background:var(--correct)"></span>Правильно: <span id="correctCount">0</span></span>
+      <span><span class="legend-dot" style="background:var(--wrong)"></span>Неправильно: <span id="wrongCount">0</span></span>
+    </div>
+  </div>
+
+  <!-- EXAMPLE AREA -->
+  <div id="exampleArea">
+    <div class="empty-state">
+      <div class="emoji">🧮</div>
+      <p>Настрой параметры и нажми<br>«Применить», чтобы начать!</p>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-buttons" id="navButtons" style="display:none">
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Назад</button>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Вперёд →</button>
+  </div>
+</div>
+
+<script>
+  const MAX_ATTEMPTS = 5;
+  let mode = 'noBorrow';
+  let examples = [];
+  let currentIndex = 0;
+  let results  = []; // null | 'correct' | 'wrong'
+  let attempts = []; // wrong attempt count
+
+  function setMode(m) {
+    mode = m;
+    document.getElementById('modeNoBorrow').classList.toggle('active', m === 'noBorrow');
+    document.getElementById('modeBorrow').classList.toggle('active', m === 'borrow');
+  }
+
+  function randInt(a, b) {
+    return Math.floor(Math.random() * (b - a + 1)) + a;
+  }
+
+  // Check if subtraction A - B requires borrowing (any digit of B > corresponding digit of A)
+  function hasBorrow(a, b) {
+    const ah = Math.floor(a / 100), at = Math.floor((a % 100) / 10), au = a % 10;
+    const bh = Math.floor(b / 100), bt = Math.floor((b % 100) / 10), bu = b % 10;
+    // units borrow
+    if (bu > au) return true;
+    // after potential borrow from tens
+    const auAdj = bu > au ? au + 10 : au;
+    const atAdj = bu > au ? at - 1 : at;
+    if (bt > atAdj) return true;
+    if (bh > ah) return true;
+    return false;
+  }
+
+  // Has zero in tens digit of the minuend (e.g. 305, 607, 102)
+  function hasZeroInTens(n) {
+    return n >= 100 && Math.floor((n % 100) / 10) === 0;
+  }
+
+  function generateExamples() {
+    const maxVal = parseInt(document.getElementById('maxRange').value);
+    const arr = [];
+
+    // We need at least 2 examples where minuend has 0 in tens
+    // and all examples satisfy borrow/noBorrow constraint
+    const needZeroTens = 2;
+    let zeroTensCount = 0;
+    let tries = 0;
+
+    while (arr.length < 10 && tries < 5000) {
+      tries++;
+      let a, b;
+
+      if (mode === 'noBorrow') {
+        // Generate A, then pick B digit-by-digit so no borrow occurs
+        a = randInt(10, maxVal);
+        const au = a % 10;
+        const at = Math.floor((a % 100) / 10);
+        const ah = Math.floor(a / 100);
+
+        const bu = randInt(0, au);
+        const bt = randInt(0, at);
+        const bh = randInt(0, ah);
+        b = bh * 100 + bt * 10 + bu;
+        if (b === 0 || b >= a) continue;
+        if (hasBorrow(a, b)) continue;
+      } else {
+        // borrow mode: ensure at least one borrow happens
+        a = randInt(10, maxVal);
+        b = randInt(1, a - 1);
+        if (!hasBorrow(a, b)) continue;
+      }
+
+      const diff = a - b;
+      if (diff <= 0) continue;
+
+      // Ensure at least needZeroTens examples have 0 in tens of minuend
+      // Use slots: first needZeroTens slots are forced, rest are free
+      const wantZeroTens = arr.length < needZeroTens && zeroTensCount < needZeroTens;
+
+      if (wantZeroTens) {
+        // Force a to have 0 in tens — only possible if maxVal >= 100
+        if (maxVal < 100) {
+          // Can't do zero-in-tens below 100, just add normally
+          arr.push({ a, b, diff });
+          zeroTensCount++; // pretend satisfied
+          continue;
+        }
+        if (!hasZeroInTens(a)) continue; // retry
+        zeroTensCount++;
+      }
+
+      arr.push({ a, b, diff });
+    }
+
+    // If we ran out of tries and still need zero-tens examples, patch remaining
+    // (should not happen in practice but as safety net)
+    return arr.slice(0, 10);
+  }
+
+  function applySettings() {
+    examples = generateExamples();
+    results  = new Array(10).fill(null);
+    attempts = new Array(10).fill(0);
+    currentIndex = 0;
+    document.getElementById('progressSection').style.display = 'block';
+    document.getElementById('navButtons').style.display = 'flex';
+    renderProgress();
+    renderCard();
+  }
+
+  function renderProgress() {
+    const track = document.getElementById('progressBar');
+    track.innerHTML = '';
+    let correct = 0, wrong = 0;
+    results.forEach(r => {
+      const seg = document.createElement('div');
+      seg.className = 'progress-segment';
+      if (r === 'correct') { seg.classList.add('correct'); correct++; }
+      else if (r === 'wrong') { seg.classList.add('wrong'); wrong++; }
+      track.appendChild(seg);
+    });
+    const answered = results.filter(r => r !== null).length;
+    document.getElementById('progressCounter').textContent = `${answered} / 10`;
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('wrongCount').textContent = wrong;
+  }
+
+  function renderCard() {
+    const ex     = results[currentIndex] !== null ? examples[currentIndex] : examples[currentIndex];
+    const exData = examples[currentIndex];
+    const result = results[currentIndex];
+    const att    = attempts[currentIndex];
+    const locked = result !== null;
+    const disabled = locked ? 'disabled' : '';
+
+    const inputClass = result === 'correct' ? 'input-correct' : result === 'wrong' ? 'input-wrong' : '';
+
+    // Badge
+    let badge = '';
+    if (result === 'correct') badge = `<div class="card-badge correct-badge">✅</div>`;
+    else if (result === 'wrong') badge = `<div class="card-badge wrong-badge">❌</div>`;
+
+    // Feedback
+    let feedbackText = '', feedbackClass = '';
+    if (result === 'correct') {
+      feedbackText = '🎉 Верно! Отлично!';
+      feedbackClass = 'correct';
+    } else if (result === 'wrong') {
+      feedbackText = `😢 Правильный ответ: ${exData.diff}`;
+      feedbackClass = 'wrong';
+    } else if (att > 0) {
+      const left = MAX_ATTEMPTS - att;
+      feedbackText = `😟 Неверно! Попыток осталось: ${left}`;
+      feedbackClass = 'wrong';
+    }
+
+    // Borrow badge
+    const borrowBadge = mode === 'borrow'
+      ? `<div style="text-align:center;margin-bottom:14px"><span class="borrow-badge">🔄 С переходом через разряд</span></div>`
+      : '';
+
+    // Attempt dots
+    let dotsHTML = '';
+    if (!locked) {
+      dotsHTML = '<div class="attempt-dots">';
+      for (let i = 0; i < MAX_ATTEMPTS; i++) {
+        dotsHTML += `<span class="attempt-dot ${i < att ? 'used' : ''}"></span>`;
+      }
+      dotsHTML += '</div>';
+    }
+
+    // Answer value shown only when resolved
+    const ansVal = locked ? exData.diff : '';
+
+    const area = document.getElementById('exampleArea');
+    area.innerHTML = `
+      <div class="example-card" id="exampleCard">
+        ${badge}
+        <div class="example-num">Пример ${currentIndex + 1} из 10</div>
+        ${borrowBadge}
+
+        ${buildVisual(exData)}
+
+        <div class="input-area">
+          <div class="input-group">
+            <span class="input-label">Разность</span>
+            <input type="number" class="answer-input ${inputClass}" id="inputAns"
+              placeholder="?" value="${ansVal}" ${disabled} min="0">
+          </div>
+        </div>
+
+        ${dotsHTML}
+
+        <button class="check-btn" id="checkBtn" onclick="checkAnswer()" ${disabled}>
+          ✔️ Проверить
+        </button>
+        <div class="feedback ${feedbackClass}" id="feedback">${feedbackText}</div>
+      </div>`;
+
+    if (!locked) {
+      const inp = document.getElementById('inputAns');
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+      inp.focus();
+    }
+    updateNavBtns();
+  }
+
+  // Split number into array of digit strings, padded to `cols` length (left-pad with '')
+  function splitDigits(n, cols) {
+    const s = String(n);
+    const arr = s.split('');
+    while (arr.length < cols) arr.unshift('');
+    return arr;
+  }
+
+  function buildVisual(exData) {
+    const cols = exData.a >= 100 ? 3 : 2;
+    const LABELS = cols === 3
+      ? ['сотни', 'десятки', 'единицы']
+      : ['десятки', 'единицы'];
+
+    const aDigits = splitDigits(exData.a, cols);
+    const bDigits = splitDigits(exData.b, cols);
+
+    // ── Inline expression ──
+    // approximate label widths: minuend width ~ length*1.4rem, gap, subtrahend, gap, =?, gap
+    const inlineExpr = `
+      <div class="inline-expr">
+        <span class="ie-minuend">${exData.a}</span>
+        <span class="ie-minus">−</span>
+        <span class="ie-sub">${exData.b}</span>
+        <span class="ie-eq">=</span>
+        <span class="ie-q">?</span>
+      </div>
+      <div class="inline-labels" style="gap:10px;margin-bottom:22px">
+        <span class="il-item" style="min-width:5rem;text-align:center">уменьшаемое</span>
+        <span class="il-item" style="min-width:2rem"></span>
+        <span class="il-item" style="min-width:4rem;text-align:center">вычитаемое</span>
+        <span class="il-item" style="min-width:2rem"></span>
+        <span class="il-item" style="min-width:3rem;text-align:center">разность</span>
+      </div>`;
+
+    // ── Column grid ──
+    // Grid: [sign col] [digit col] × cols
+    // Rows: header, minuend digits, subtrahend digits, underline (via border-top on sign/digits)
+
+    // Header row: empty sign cell + label cells
+    let headerCells = `<div class="col-header-cell col-header-sign"></div>`;
+    LABELS.forEach(l => {
+      headerCells += `<div class="col-header-cell">${l}</div>`;
+    });
+
+    // Minuend row: empty sign + digit cells
+    let minRow = `<div class="sign-cell empty-sign"></div>`;
+    aDigits.forEach(d => {
+      minRow += `<div class="dcell minuend-digit">${d}</div>`;
+    });
+
+    // Subtrahend row: minus sign + digit cells
+    let subRow = `<div class="sign-cell">−</div>`;
+    bDigits.forEach(d => {
+      subRow += `<div class="dcell subtra-digit">${d}</div>`;
+    });
+
+    // Underline: spans all digit columns (not sign col), rendered as border-top on a flex row
+    const underline = `
+      <div style="display:contents">
+        <div></div>
+        <div style="grid-column: span ${cols}; border-top: 3px solid var(--border); margin: 2px 0 0; border-radius:2px;"></div>
+      </div>`;
+
+    const gridCols = `2.2rem repeat(${cols}, 3rem)`;
+
+    const columnBlock = `
+      <div class="col-wrap">
+        <div class="col-grid" style="display:inline-grid; grid-template-columns:${gridCols}; align-items:end;">
+          ${headerCells}
+          ${minRow}
+          ${subRow}
+          ${underline}
+        </div>
+      </div>`;
+
+    return inlineExpr + columnBlock;
+  }
+
+  function checkAnswer() {
+    if (results[currentIndex] !== null) return;
+    const exData = examples[currentIndex];
+    const inp    = document.getElementById('inputAns');
+    const val    = parseInt(inp.value);
+    const card   = document.getElementById('exampleCard');
+
+    if (isNaN(val)) { inp.focus(); return; }
+
+    const correct = val === exData.diff;
+
+    if (correct) {
+      results[currentIndex] = 'correct';
+      renderProgress();
+      card.classList.add('glow-correct');
+      launchConfetti();
+      showEmoji('🎉');
+      setTimeout(() => renderCard(), 700);
+    } else {
+      attempts[currentIndex]++;
+      const att = attempts[currentIndex];
+      card.classList.add('shake');
+      setTimeout(() => card.classList.remove('shake'), 450);
+
+      if (att >= MAX_ATTEMPTS) {
+        results[currentIndex] = 'wrong';
+        renderProgress();
+        showEmoji('😢');
+        setTimeout(() => renderCard(), 700);
+      } else {
+        const left = MAX_ATTEMPTS - att;
+        showEmoji('😟');
+        const fb = document.getElementById('feedback');
+        fb.textContent = `😟 Неверно! Попыток осталось: ${left}`;
+        fb.className = 'feedback wrong';
+        // Update dots
+        document.querySelectorAll('.attempt-dot').forEach((d, i) => {
+          if (i < att) d.classList.add('used');
+        });
+        inp.value = '';
+        inp.focus();
+      }
+    }
+  }
+
+  function navigate(dir) {
+    const next = currentIndex + dir;
+    if (next < 0 || next >= examples.length) return;
+    currentIndex = next;
+    renderCard();
+  }
+
+  function updateNavBtns() {
+    document.getElementById('prevBtn').disabled = currentIndex === 0;
+    document.getElementById('nextBtn').disabled = currentIndex === examples.length - 1;
+  }
+
+  /* ── CONFETTI ── */
+  const COLORS = ['#5b9fd6','#62c08a','#e87c6b','#f5c842','#a98de8','#74d0f0'];
+  function launchConfetti() {
+    const c = document.getElementById('confettiContainer');
+    for (let i = 0; i < 65; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.top  = '-20px';
+      p.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
+      p.style.width  = (7 + Math.random() * 9) + 'px';
+      p.style.height = (7 + Math.random() * 9) + 'px';
+      p.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+      p.style.animationDuration = (1.4 + Math.random() * 2) + 's';
+      p.style.animationDelay   = (Math.random() * 0.5) + 's';
+      c.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
+    }
+  }
+
+  function showEmoji(e) {
+    const el = document.createElement('div');
+    el.className = 'emoji-burst';
+    el.textContent = e;
+    document.body.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+  }
+</script>
+</body>
+</html>

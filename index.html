@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Математические тренажёры</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf6ee;
+    --card: #fff9f2;
+    --primary: #f4845f;
+    --primary-light: #fdddd3;
+    --accent: #6bbf94;
+    --accent-light: #d4f0e3;
+    --blue: #74b3e8;
+    --blue-light: #d8edfc;
+    --yellow: #f9d56e;
+    --yellow-light: #fef6d6;
+    --purple: #c49de8;
+    --purple-light: #eedeff;
+    --text: #3d3642;
+    --muted: #a09aab;
+    --border: #ecdfd4;
+    --radius: 20px;
+    --radius-sm: 12px;
+    --shadow: 0 4px 24px rgba(100,60,30,0.08);
+    --shadow-hover: 0 8px 36px rgba(100,60,30,0.14);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 16px 64px;
+    background-image:
+      radial-gradient(circle at 10% 10%, #fde6da55 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, #d4f0e355 0%, transparent 40%),
+      radial-gradient(circle at 60% 20%, #d8edfc44 0%, transparent 30%),
+      radial-gradient(circle at 20% 80%, #eedeff33 0%, transparent 30%);
+  }
+
+  /* ── DECORATIVE FLOATING ICONS ── */
+  .deco {
+    position: fixed;
+    pointer-events: none;
+    user-select: none;
+    font-size: 2.4rem;
+    opacity: 0.15;
+    animation: float 6s ease-in-out infinite;
+  }
+  .deco:nth-child(1) { top: 5%;    left: 3%;   animation-delay: 0s; }
+  .deco:nth-child(2) { top: 12%;   right: 5%;  animation-delay: 1s;   font-size: 2rem; }
+  .deco:nth-child(3) { bottom: 8%; left: 6%;   animation-delay: 2s;   font-size: 1.8rem; }
+  .deco:nth-child(4) { bottom: 15%;right: 4%;  animation-delay: 3s; }
+  .deco:nth-child(5) { top: 50%;   left: 1%;   animation-delay: 1.5s; font-size: 1.6rem; }
+  .deco:nth-child(6) { top: 35%;   right: 2%;  animation-delay: 2.5s; font-size: 1.9rem; }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0px) rotate(0deg); }
+    50%      { transform: translateY(-12px) rotate(5deg); }
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    border-radius: 99px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  h1 span { color: var(--primary); }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 600;
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1.5px;
+    background: var(--border);
+    border-radius: 99px;
+  }
+
+  /* ── TRAINER GRID ── */
+  .trainers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 540px) {
+    .trainers-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 2rem; }
+  }
+
+  /* ── TRAINER CARD ── */
+  .trainer-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .trainer-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .trainer-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* Color accents per operation */
+  .card-multiply::before  { background: var(--primary); }
+  .card-divide::before    { background: var(--blue); }
+  .card-subtract::before  { background: var(--accent); }
+
+  .card-multiply:hover  { border-color: var(--primary); }
+  .card-divide:hover    { border-color: var(--blue); }
+  .card-subtract:hover  { border-color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .trainer-card:nth-child(1) { animation-delay: 0.1s; }
+  .trainer-card:nth-child(2) { animation-delay: 0.2s; }
+  .trainer-card:nth-child(3) { animation-delay: 0.3s; }
+  .trainer-card:nth-child(4) { animation-delay: 0.4s; }
+  .trainer-card:nth-child(5) { animation-delay: 0.5s; }
+
+  .card-icon {
+    font-size: 2.2rem;
+    line-height: 1;
+  }
+
+  .card-body { flex: 1; }
+
+  .card-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  .card-tag {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .tag-multiply  { background: var(--primary-light);  color: var(--primary); }
+  .tag-divide    { background: var(--blue-light);      color: #4a8ec2; }
+  .tag-subtract  { background: var(--accent-light);    color: #3a9a6a; }
+
+  .card-version {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+
+  .card-arrow {
+    position: absolute;
+    bottom: 22px;
+    right: 22px;
+    font-size: 1rem;
+    color: var(--muted);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .trainer-card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ── FOOTER NOTE ── */
+  .footer-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding-top: 8px;
+    animation: fadeUp 0.5s ease 0.6s both;
+  }
+
+  .footer-note a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .footer-note a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="deco">⭐</div>
+<div class="deco">🌟</div>
+<div class="deco">🎒</div>
+<div class="deco">🍎</div>
+<div class="deco">✏️</div>
+<div class="deco">🐣</div>
+
+<div class="container">
+
+  <header class="header">
+    <div class="header-badge">🧮 Учебные тренажёры</div>
+    <h1>Математика —<br><span>тренируйся каждый день</span></h1>
+    <p class="subtitle">Интерактивные упражнения для школьников. Выбери тему и начинай!</p>
+  </header>
+
+  <div class="section-label">Умножение</div>
+  <div class="trainers-grid">
+
+    <a class="trainer-card card-multiply" href="multiplication-trainer_2.html">
+      <div class="card-icon">✖️</div>
+      <div class="card-body">
+        <div class="card-title">Таблица умножения</div>
+        <div class="card-desc">20 примеров за раунд. Визуализация с корзинками и цыплятами. Выбор таблицы или микс 2–10.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-tag tag-multiply">Умножение</span>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+
+  </div>
+
+  <div class="section-label">Деление</div>
+  <div class="trainers-grid">
+
+    <a class="trainer-card card-divide" href="division-trainer_2.html">
+      <div class="card-icon">➗</div>
+      <div class="card-body">
+        <div class="card-title">Тренажёр деления</div>
+        <div class="card-desc">Drag & drop: распредели цыплят по корзинкам. Выбор делителя, визуальная подсказка.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-tag tag-divide">Деление</span>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="trainer-card card-divide" href="division-trainer_1.html">
+      <div class="card-icon">➗</div>
+      <div class="card-body">
+        <div class="card-title">Деление столбиком</div>
+        <div class="card-desc">Тренажёр для 4 класса. Пошаговое деление с проверкой каждого шага.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-tag tag-divide">Деление</span>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+
+  </div>
+
+  <div class="section-label">Вычитание</div>
+  <div class="trainers-grid">
+
+    <a class="trainer-card card-subtract" href="subtraction-trainer_1.html">
+      <div class="card-icon">➖</div>
+      <div class="card-body">
+        <div class="card-title">Вычитание столбиком</div>
+        <div class="card-desc">Тренажёр для 3–4 класса. Пошаговое вычитание с переносом разряда.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-tag tag-subtract">Вычитание</span>
+        <span class="card-version">v1</span>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+
+  </div>
+
+  <p class="footer-note">Прототипы учебных приложений · Версионирование на <a href="https://github.com" target="_blank">GitHub</a></p>
+
+</div>
+</body>
+</html>
