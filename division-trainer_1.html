@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Деление столбиком — Тренажёр</title>
+<title></title>
+<script>const PAGE_KEY = 'division-col';</script>
+<script src="i18n/index.js" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -60,7 +62,7 @@
     margin-bottom: 28px;
   }
 
-  /* ── DECORATIVE ICONS ── */
+  
   .deco {
     position: fixed;
     pointer-events: none;
@@ -79,13 +81,13 @@
     50% { transform: translateY(-12px) rotate(5deg); }
   }
 
-  /* ── LAYOUT ── */
+  
   .container {
     max-width: 700px;
     margin: 0 auto;
   }
 
-  /* ── SETTINGS CARD ── */
+  
   .settings-card {
     background: var(--card);
     border: 1.5px solid var(--border);
@@ -212,7 +214,7 @@
 
   .apply-btn:active { transform: translateY(0); }
 
-  /* ── PROGRESS BAR ── */
+  
   .progress-section {
     margin-bottom: 20px;
   }
@@ -269,7 +271,7 @@
     margin-right: 4px;
   }
 
-  /* ── EXAMPLE CARD ── */
+  
   .example-card {
     background: var(--card);
     border: 1.5px solid var(--border);
@@ -311,7 +313,7 @@
     margin-bottom: 20px;
   }
 
-  /* ── LONG DIVISION DISPLAY ── */
+  
   .division-visual {
     display: flex;
     justify-content: center;
@@ -361,7 +363,7 @@
     line-height: 1;
   }
 
-  /* ── ATTEMPT DOTS ── */
+  
   .attempt-dots {
     display: flex;
     justify-content: center;
@@ -381,7 +383,7 @@
     transform: scale(1.15);
   }
 
-  /* ── INPUT AREA ── */
+  
   .input-area {
     display: flex;
     gap: 16px;
@@ -439,7 +441,7 @@
     background: #fde8e8;
   }
 
-  /* ── CHECK BUTTON ── */
+  
   .check-btn {
     display: block;
     width: 100%;
@@ -470,7 +472,7 @@
     transform: none;
   }
 
-  /* ── FEEDBACK ── */
+  
   .feedback {
     text-align: center;
     font-family: 'Baloo 2', cursive;
@@ -484,7 +486,7 @@
   .feedback.correct { color: var(--correct); }
   .feedback.wrong { color: var(--wrong); }
 
-  /* ── NAV BUTTONS ── */
+  
   .nav-buttons {
     display: flex;
     gap: 12px;
@@ -523,7 +525,7 @@
     transform: none;
   }
 
-  /* ── CONFETTI ── */
+  
   .confetti-container {
     position: fixed;
     top: 0; left: 0;
@@ -545,7 +547,7 @@
     100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
   }
 
-  /* ── EMOJI OVERLAY ── */
+  
   .emoji-burst {
     position: fixed;
     top: 50%; left: 50%;
@@ -563,7 +565,7 @@
     100% { transform: translate(-50%, -60%) scale(0.8); opacity: 0; }
   }
 
-  /* ── EMPTY STATE ── */
+  
   .empty-state {
     text-align: center;
     padding: 48px 24px;
@@ -573,7 +575,7 @@
   .empty-state .emoji { font-size: 3rem; margin-bottom: 12px; }
   .empty-state p { font-size: 1rem; font-weight: 600; }
 
-  /* ── BADGE on card ── */
+  
   .card-badge {
     position: absolute;
     top: 20px; right: 20px;
@@ -599,59 +601,52 @@
 <div class="confetti-container" id="confettiContainer"></div>
 
 <div class="container">
-  <h1>➗ Деление столбиком</h1>
-  <p class="subtitle">Тренажёр для 4 класса</p>
+  <h1 data-i18n="h1"></h1>
+  <p class="subtitle" data-i18n="subtitle"></p>
 
   <!-- SETTINGS -->
   <div class="settings-card">
-    <div class="settings-title">⚙️ Настройки</div>
+    <div class="settings-title" data-i18n="settings_title"></div>
     <div class="settings-grid">
-      <!-- Mode -->
       <div class="setting-group">
-        <label>Тип деления</label>
+        <label data-i18n="mode_label"></label>
         <div class="mode-toggle">
-          <button class="mode-btn active" id="modeNoRemainder" onclick="setMode('noRemainder')">
-            Без остатка
-          </button>
-          <button class="mode-btn" id="modeRemainder" onclick="setMode('remainder')">
-            С остатком
-          </button>
+          <button class="mode-btn active" id="modeNoRemainder" onclick="setMode('noRemainder')" data-i18n="mode_no_remainder"></button>
+          <button class="mode-btn" id="modeRemainder" onclick="setMode('remainder')" data-i18n="mode_remainder"></button>
         </div>
       </div>
 
-      <!-- Divisor range -->
       <div class="setting-group">
-        <label>Делитель (до)</label>
-        <div class="range-display" id="divisorDisplay">до 9</div>
+        <label data-i18n="divisor_label"></label>
+        <div class="range-display" id="divisorDisplay"></div>
         <div class="range-wrap">
           <input type="range" id="divisorRange" min="2" max="100" value="9"
-            oninput="document.getElementById('divisorDisplay').textContent = 'до ' + this.value">
+            oninput="updateRangeDisplay('divisorDisplay', 'divisor_display', this.value)">
         </div>
       </div>
 
-      <!-- Dividend range -->
       <div class="setting-group">
-        <label>Делимое (до)</label>
-        <div class="range-display" id="dividendDisplay">до 999</div>
+        <label data-i18n="dividend_label"></label>
+        <div class="range-display" id="dividendDisplay"></div>
         <div class="range-wrap">
           <input type="range" id="dividendRange" min="10" max="100000" value="999" step="100"
-            oninput="document.getElementById('dividendDisplay').textContent = 'до ' + (+this.value).toLocaleString('ru')">
+            oninput="updateRangeDisplay('dividendDisplay', 'dividend_display', +this.value)">
         </div>
       </div>
     </div>
-    <button class="apply-btn" onclick="applySettings()">🎯 Применить — новые 10 примеров</button>
+    <button class="apply-btn" onclick="applySettings()" data-i18n="apply_btn"></button>
   </div>
 
   <!-- PROGRESS BAR -->
   <div class="progress-section" id="progressSection" style="display:none">
     <div class="progress-header">
-      <span>Прогресс</span>
+      <span data-i18n="progress_label"></span>
       <span class="progress-counter" id="progressCounter">0 / 10</span>
     </div>
     <div class="progress-bar-track" id="progressBar"></div>
     <div class="progress-legend">
-      <span><span class="legend-dot" style="background:var(--correct)"></span>Правильно: <span id="correctCount">0</span></span>
-      <span><span class="legend-dot" style="background:var(--wrong)"></span>Неправильно: <span id="wrongCount">0</span></span>
+      <span><span class="legend-dot" style="background:var(--correct)"></span><span data-i18n="progress_correct"></span>: <span id="correctCount">0</span></span>
+      <span><span class="legend-dot" style="background:var(--wrong)"></span><span data-i18n="progress_wrong"></span>: <span id="wrongCount">0</span></span>
     </div>
   </div>
 
@@ -659,14 +654,14 @@
   <div id="exampleArea">
     <div class="empty-state">
       <div class="emoji">🧮</div>
-      <p>Настрой параметры и нажми «Применить»,<br>чтобы начать!</p>
+      <p data-i18n="empty_state_text"></p>
     </div>
   </div>
 
   <!-- NAV BUTTONS -->
   <div class="nav-buttons" id="navButtons" style="display:none">
-    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Назад</button>
-    <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Вперёд →</button>
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled data-i18n="nav_prev"></button>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)" data-i18n="nav_next"></button>
   </div>
 </div>
 
@@ -674,8 +669,17 @@
   let mode = 'noRemainder';
   let examples = [];
   let currentIndex = 0;
-  let results = []; // null | 'correct' | 'wrong'
-  let attempts = []; // wrong attempt count per example (0-based, max 5)
+  let results = [];
+  let attempts = [];
+
+  function updateRangeDisplay(elId, key, value) {
+    document.getElementById(elId).textContent = t(key, { value: (+value).toLocaleString() });
+  }
+
+  document.addEventListener('i18n:ready', () => {
+    updateRangeDisplay('divisorDisplay', 'divisor_display', document.getElementById('divisorRange').value);
+    updateRangeDisplay('dividendDisplay', 'dividend_display', document.getElementById('dividendRange').value);
+  });
 
   function setMode(m) {
     mode = m;
@@ -768,18 +772,16 @@
     let feedbackText = '';
     let feedbackClass = '';
     if (result === 'correct') {
-      feedbackText = '🎉 Верно! Молодец!';
+      feedbackText = t('feedback_correct');
       feedbackClass = 'correct';
     } else if (result === 'wrong') {
       feedbackText = mode === 'remainder'
-        ? `😢 Правильный ответ: ${ex.quotient} ост. ${ex.remainder}`
-        : `😢 Правильный ответ: ${ex.quotient}`;
+        ? t('feedback_wrong_reveal_remainder', { quotient: ex.quotient, remainder: ex.remainder })
+        : t('feedback_wrong_reveal', { quotient: ex.quotient });
       feedbackClass = 'wrong';
     } else if (att > 0) {
       const left = MAX_ATTEMPTS - att;
-      feedbackText = left > 0
-        ? `😟 Неверно! Попыток осталось: ${left}`
-        : '';
+      feedbackText = left > 0 ? t('feedback_attempts_left', { left }) : '';
       feedbackClass = 'wrong';
     }
 
@@ -791,20 +793,20 @@
     if (mode === 'remainder') {
       inputsHTML = `
         <div class="input-group">
-          <span class="input-label">Частное</span>
+          <span class="input-label">${t('input_label_quotient')}</span>
           <input type="number" class="answer-input ${quotClass}" id="inputQuot"
             placeholder="?" value="${quotVal}" ${disabled} min="0">
         </div>
-        <div style="font-family:'Baloo 2',cursive;font-size:2rem;font-weight:800;color:var(--muted);align-self:flex-end;padding-bottom:10px">ост.</div>
+        <div style="font-family:'Baloo 2',cursive;font-size:2rem;font-weight:800;color:var(--muted);align-self:flex-end;padding-bottom:10px">${t('remainder_separator')}</div>
         <div class="input-group">
-          <span class="input-label">Остаток</span>
+          <span class="input-label">${t('input_label_remainder')}</span>
           <input type="number" class="answer-input ${quotClass}" id="inputRem"
             placeholder="?" value="${remVal}" ${disabled} min="0">
         </div>`;
     } else {
       inputsHTML = `
         <div class="input-group">
-          <span class="input-label">Частное</span>
+          <span class="input-label">${t('input_label_quotient')}</span>
           <input type="number" class="answer-input ${quotClass}" id="inputQuot"
             placeholder="?" value="${quotVal}" ${disabled} min="0">
         </div>`;
@@ -824,23 +826,23 @@
     area.innerHTML = `
       <div class="example-card" id="exampleCard">
         ${badge}
-        <div class="example-num">Пример ${currentIndex + 1} из 10</div>
+        <div class="example-num">${t('example_counter', { current: currentIndex + 1, total: 10 })}</div>
 
         <div class="division-visual">
           <div class="division-labeled">
             <div class="dl-item">
               <div class="dl-number dividend-num">${ex.dividend}</div>
-              <div class="dl-label">делимое</div>
+              <div class="dl-label">${t('division_label_dividend')}</div>
             </div>
             <div class="div-sign">÷</div>
             <div class="dl-item">
               <div class="dl-number divisor-num">${ex.divisor}</div>
-              <div class="dl-label">делитель</div>
+              <div class="dl-label">${t('division_label_divisor')}</div>
             </div>
             <div class="div-sign">=</div>
             <div class="dl-item">
               <div class="dl-number answer-num">?</div>
-              <div class="dl-label">частное</div>
+              <div class="dl-label">${t('division_label_quotient')}</div>
             </div>
           </div>
         </div>
@@ -848,7 +850,7 @@
         <div class="input-area">${inputsHTML}</div>
         ${dotsHTML}
         <button class="check-btn" id="checkBtn" onclick="checkAnswer()" ${disabled}>
-          ✔️ Проверить
+          ${t('check_btn')}
         </button>
         <div class="feedback ${feedbackClass}" id="feedback">${feedbackText}</div>
       </div>`;
@@ -907,7 +909,7 @@
         showEmoji('😟');
         const left = MAX_ATTEMPTS - att;
         const fb = document.getElementById('feedback');
-        fb.textContent = `😟 Неверно! Попыток осталось: ${left}`;
+        fb.textContent = t('feedback_attempts_left', { left });
         fb.className = 'feedback wrong';
         // update dots
         const dots = document.querySelectorAll('.attempt-dot');
@@ -935,7 +937,7 @@
     document.getElementById('nextBtn').disabled = currentIndex === 9;
   }
 
-  /* ── CONFETTI ── */
+  
   const CONFETTI_COLORS = ['#f4845f','#6bbf94','#74b3e8','#f9d56e','#c49de8','#f47c7c'];
 
   function launchConfetti() {
