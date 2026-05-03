@@ -337,19 +337,11 @@ async function _init() {
   };
 
   try {
-    const [strings] = await Promise.all([
-      load(_lang),
-      new Promise(resolve => setTimeout(resolve, 500)),
-    ]);
-    _strings = strings;
+    _strings = await load(_lang);
   } catch (err) {
     console.warn(`[i18n] Failed to load "${_lang}", trying fallback "ru"...`);
     try {
-      const [strings] = await Promise.all([
-        load(I18N_FALLBACK_LANG),
-        new Promise(resolve => setTimeout(resolve, 500)),
-      ]);
-      _strings = strings;
+      _strings = await load(I18N_FALLBACK_LANG);
       _lang = I18N_FALLBACK_LANG;
       localStorage.setItem(I18N_STORAGE_KEY, I18N_FALLBACK_LANG);
     } catch (fallbackErr) {
