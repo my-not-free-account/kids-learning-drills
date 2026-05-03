@@ -21,5 +21,15 @@
   "drag_label": "🧺 {count} {bWord} — перетащи 🐣 в корзинки",
   "drag_source_label": "Перетащи цыплёнка",
   "drag_max_hint": "Максимум достигнут ({max})",
-  "empty_state_text": "Выбери таблицу и нажми «Применить»,\nчтобы начать тренировку!"
+  "empty_state_text": "Выбери таблицу и нажми «Применить»,\nчтобы начать тренировку!",
+  "table_btn_2": "на 2",
+  "table_btn_3": "на 3",
+  "table_btn_4": "на 4",
+  "table_btn_5": "на 5",
+  "table_btn_6": "на 6",
+  "table_btn_7": "на 7",
+  "table_btn_8": "на 8",
+  "table_btn_9": "на 9",
+  "table_btn_10": "на 10",
+  "chick_remove_hint": "Двойной клик — убрать"
 }
