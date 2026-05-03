@@ -292,6 +292,32 @@ function _showLoader() {
   };
 }
 
+// --- Error screen ---
+
+function _showError() {
+  const el = document.createElement('div');
+  el.style.cssText = `
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: #fdf6ee; gap: 16px;
+    font-family: 'Baloo 2', cursive;
+  `;
+  el.innerHTML = `
+    <div style="font-size:3rem">😢</div>
+    <div style="font-size:1.1rem;font-weight:700;color:#3d3642">
+      Could not load translations
+    </div>
+    <button onclick="location.reload()" style="
+      padding: 10px 24px; border-radius: 12px; border: none;
+      background: #f4845f; color: white;
+      font-family: 'Baloo 2', cursive;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+    ">Try again</button>
+  `;
+  document.body.appendChild(el);
+}
+
 // --- Init ---
 
 async function _init() {
@@ -301,18 +327,35 @@ async function _init() {
   const base    = _baseUrl();
   const pageKey = (typeof PAGE_KEY !== 'undefined') ? PAGE_KEY : 'index';
 
-  try {
+  const load = async (lang) => {
     const [common, page] = await Promise.all([
-      _fetchJSON(`${base}/locales/common.${_lang}.json`),
-      _fetchJSON(`${base}/locales/${pageKey}.${_lang}.json`),
+      _fetchJSON(`${base}/locales/common.${lang}.json`),
+      _fetchJSON(`${base}/locales/${pageKey}.${lang}.json`),
+    ]);
+    return { ...common, ...page };
+  };
+
+  try {
+    const [strings] = await Promise.all([
+      load(_lang),
       new Promise(resolve => setTimeout(resolve, 500)),
     ]);
-
-    _strings = { ...common, ...page };
-
+    _strings = strings;
   } catch (err) {
-    console.error('[i18n] Failed to load translations:', err);
-    _strings = {};
+    console.warn(`[i18n] Failed to load "${_lang}", trying fallback "ru"...`);
+    try {
+      const [strings] = await Promise.all([
+        load(I18N_DEFAULT_LANG),
+        new Promise(resolve => setTimeout(resolve, 500)),
+      ]);
+      _strings = strings;
+      _lang = I18N_DEFAULT_LANG;
+    } catch (fallbackErr) {
+      console.error('[i18n] Fallback also failed:', fallbackErr);
+      loader.hide();
+      _showError();
+      return;
+    }
   }
 
   _applyHtmlLang();
