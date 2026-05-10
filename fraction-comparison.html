@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<script>const PAGE_KEY = 'fraction-comparison';</script>
+<script src="i18n/index.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="index.css">
+  <style>
+  .container { max-width: 860px; }
+
+  /* ── GENERATE BUTTON ── */
+  .generate-wrap { display: flex; justify-content: center; margin-bottom: 28px; }
+  .generate-btn {
+    padding: 16px 40px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: linear-gradient(135deg, var(--primary) 0%, #e8683e 100%);
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(244,132,95,0.4);
+    transition: all 0.2s ease;
+  }
+  .generate-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(244,132,95,0.5); }
+  .generate-btn:active { transform: translateY(0); }
+
+  /* ── VISUALIZATION LAYOUT ── */
+  .viz-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 24px;
+  }
+  .pie-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 12px 12px;
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    background: white;
+    min-width: 0;
+    transition: border-color 0.3s;
+  }
+  .pie-section.left-section  { border-color: #d8edfc; background: #f5fbff; }
+  .pie-section.right-section { border-color: #d4f0e3; background: #f4fbf7; }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+  }
+
+  .pies-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .pie-wrapper { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+  /* ── KNIFE BUTTON ── */
+  .knife-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.8rem;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    transition: transform 0.15s, background 0.15s;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .knife-btn:hover  { background: var(--primary-light); transform: rotate(-15deg) scale(1.15); }
+  .knife-btn:active { transform: rotate(-25deg) scale(1.1); }
+  .knife-btn.cut    { opacity: 0.35; cursor: default; pointer-events: none; }
+
+  .knife-hint-text {
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 4px;
+    min-height: 1.2em;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.55; }
+  }
+  .knife-hint-text.hidden { visibility: hidden; animation: none; }
+
+  /* ── SVG PIE ── */
+  .pie-svg { display: block; overflow: visible; }
+
+  /* ── COMPARISON ROW ── */
+  .comparison-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .fraction-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+  }
+  .frac-num, .frac-den {
+    font-size: 2rem;
+    line-height: 1.1;
+    color: var(--text);
+  }
+  .frac-num.left-color  { color: var(--blue); }
+  .frac-num.right-color { color: var(--accent); }
+  .frac-line {
+    width: 100%;
+    min-width: 36px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border);
+    margin: 2px 0;
+  }
+
+  .sign-box {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--muted);
+    min-width: 2.5rem;
+    text-align: center;
+    transition: color 0.3s;
+  }
+  .sign-box.filled-correct { color: var(--correct); }
+  .sign-box.filled-wrong   { color: var(--wrong); }
+
+  /* ── SIGN BUTTONS ── */
+  .sign-btn-area { margin-bottom: 20px; }
+  .sign-label {
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .sign-buttons { display: flex; gap: 14px; justify-content: center; }
+  .sign-btn {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    background: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .sign-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 6px 18px rgba(244,132,95,0.3);
+  }
+  .sign-btn:active:not(:disabled) { transform: scale(0.97); }
+  .sign-btn:disabled { opacity: 0.35; cursor: default; transform: none; box-shadow: none; }
+  .sign-btn.selected-correct { border-color: var(--correct); background: var(--accent-light); color: var(--correct); }
+  .sign-btn.selected-wrong   { border-color: var(--wrong);   background: #fde8e8;             color: var(--wrong); }
+
+  .locked-hint {
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    text-align: center;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.3rem;
+    font-weight: 800;
+    min-height: 36px;
+    transition: all 0.3s ease;
+  }
+  .feedback.correct { color: var(--correct); }
+  .feedback.wrong   { color: var(--wrong); }
+
+  .explanation {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+    margin-top: 10px;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    background: var(--yellow-light);
+    border: 1.5px solid var(--yellow);
+    display: none;
+  }
+  .explanation.visible { display: block; }
+
+  /* ── SVG ANIMATIONS ── */
+  @keyframes sliceAppear {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes lineGrow {
+    from { stroke-dashoffset: 200; }
+    to   { stroke-dashoffset: 0; }
+  }
+  @keyframes fillIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── RULES CARD ── */
+  .rules-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 22px;
+    margin-bottom: 24px;
+  }
+  .rules-card-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .rule-item {
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .rule-item.rule-denom { background: var(--blue-light);   border: 1.5px solid #b8d8f4; }
+  .rule-item.rule-num   { background: var(--yellow-light); border: 1.5px solid #f5dfa0; }
+  .rule-mini-svg { flex-shrink: 0; }
+  .rule-text { font-size: 0.8rem; font-weight: 700; color: var(--text); line-height: 1.45; }
+  .rule-text strong {
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #6b6178;
+    margin-bottom: 2px;
+  }
+
+  /* ── FRACTION ANATOMY ── */
+  .anatomy-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 14px;
+    padding: 12px 16px;
+    background: var(--primary-light);
+    border-radius: var(--radius-sm);
+    border: 1.5px solid #f5c4b0;
+    flex-wrap: wrap;
+  }
+  .anatomy-item { display: flex; align-items: center; gap: 14px; }
+  .anatomy-fraction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .anatomy-num  { color: var(--blue); }
+  .anatomy-den  { color: var(--accent); }
+  .anatomy-line { width: 100%; height: 3px; background: #c8b8a8; border-radius: 2px; margin: 2px 0; }
+  .anatomy-labels { display: flex; flex-direction: column; gap: 6px; }
+  .anatomy-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
+  }
+  .anatomy-label .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .anatomy-label.num-label .dot { background: var(--blue); }
+  .anatomy-label.den-label .dot { background: var(--accent); }
+  .anatomy-label.num-label { color: #1d5fa0; }
+  .anatomy-label.den-label { color: #1f7a4f; }
+  .anatomy-sep { width: 1.5px; height: 50px; background: #c8b8a8; border-radius: 2px; }
+
+  /* ── RULE EXAMPLE FRACTION ── */
+  .rule-example {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 7px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .ex-frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.05rem;
+    line-height: 1.1;
+  }
+  .ex-frac .ex-line { width: 100%; height: 3px; background: currentColor; margin: 2px 0; border-radius: 1px; }
+  .ex-sign { font-size: 1rem; margin: 0 2px; }
+
+  /* ── VIZ SEPARATOR ── */
+  .viz-sep {
+    width: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .viz-sep-line { width: 2px; height: 60px; background: var(--border); border-radius: 2px; }
+  .viz-sep-icon { font-size: 1.4rem; }
+
+  @media (max-width: 600px) {
+    .frac-num, .frac-den { font-size: 1.8rem; }
+    .sign-btn { width: 56px; height: 56px; font-size: 1.6rem; }
+    .rules-grid { grid-template-columns: 1fr; }
+  }
+  </style>
+</head>
+<body>
+
+<div class="deco">🥧</div>
+<div class="deco">⭐</div>
+<div class="deco">🍰</div>
+<div class="deco">🎂</div>
+<div class="deco">✏️</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="container">
+  <h1 data-i18n="h1"></h1>
+  <p class="subtitle" data-i18n="subtitle"></p>
+
+  <div class="generate-wrap">
+    <button class="generate-btn" onclick="generateExamples()" data-i18n="generate_btn"></button>
+  </div>
+
+  <!-- RULES REFERENCE CARD — always visible, static -->
+  <div class="rules-card" id="rulesCard">
+    <div class="rules-card-title">📌 <span data-i18n="rules_title"></span></div>
+    <div class="anatomy-row" id="anatomyRow"></div>
+    <div class="rules-grid" id="rulesGrid"></div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section" id="progressSection" style="display:none">
+    <div class="progress-header">
+      <span data-i18n="progress_label"></span>
+      <span class="progress-counter" id="progressCounter">0 / 20</span>
+    </div>
+    <div class="progress-bar-track" id="progressBar"></div>
+    <div class="progress-legend">
+      <span><span class="legend-dot" style="background:var(--correct)"></span><span data-i18n="progress_correct"></span>: <span id="correctCount">0</span></span>
+      <span><span class="legend-dot" style="background:var(--wrong)"></span><span data-i18n="progress_wrong"></span>: <span id="wrongCount">0</span></span>
+    </div>
+  </div>
+
+  <!-- EXAMPLE AREA -->
+  <div id="exampleArea">
+    <div class="empty-state">
+      <div class="emoji">🥧</div>
+      <p data-i18n="empty_state_text"></p>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-buttons" id="navButtons" style="display:none">
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled data-i18n="nav_prev"></button>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)" data-i18n="nav_next"></button>
+  </div>
+</div>
+
+<script>
+  const TOTAL = 20;
+  const PIE_R = 54;
+  const PIE_CX = 60;
+  const PIE_CY = 60;
+  const PIE_SIZE = 120;
+
+  // Taken slices: one saturated color per side. Remaining slices: pale neutral.
+  const LEFT_COLOR   = '#74b3e8';
+  const RIGHT_COLOR  = '#6bbf94';
+  const EMPTY_COLOR  = '#c4bab2';
+
+  let examples     = [];
+  let results      = []; // null | 'correct' | 'wrong'
+  let cutStates    = []; // { left: bool, right: bool }
+  let currentIndex = 0;
+
+  // ── Fraction helpers ──────────────────────────────────────────────
+
+  function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+
+  function fractionValue(num, den) { return num / den; }
+
+  function compareSign(numL, denL, numR, denR) {
+    const l = numL / denL;
+    const r = numR / denR;
+    if (Math.abs(l - r) < 1e-9) return '=';
+    return l > r ? '>' : '<';
+  }
+
+  function buildExplanation(ex) {
+    const { numL, denL, numR, denR, sign } = ex;
+    if (denL === denR) {
+      if (sign === '>') return t('explain_same_denom_left_bigger',  { denom: denL, numL, numR });
+      if (sign === '<') return t('explain_same_denom_right_bigger', { denom: denL, numL, numR });
+      return t('explain_same_denom_equal', { denom: denL, numL });
+    }
+    if (numL === numR) {
+      if (sign === '>') return t('explain_same_num_left_bigger',  { num: numL, denomL: denL, denomR: denR });
+      if (sign === '<') return t('explain_same_num_right_bigger', { num: numL, denomL: denL, denomR: denR });
+      return t('explain_same_num_equal', { num: numL, denom: denL });
+    }
+    if (sign === '>') return t('explain_general_left_bigger',  { numL, denomL: denL, numR, denomR: denR });
+    if (sign === '<') return t('explain_general_right_bigger', { numL, denomL: denL, numR, denomR: denR });
+    return t('explain_general_equal');
+  }
+
+  // ── Generation ─────────────────────────────────────────────────────
+
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+
+  function generateOneFraction(maxPies) {
+    // denominator per pie: 2..12; pies: 1..maxPies
+    const den = randInt(2, 12);
+    const pies = randInt(1, maxPies);
+    // num = 1 .. pies*den (at least 1, can exceed den if pies>1)
+    const maxNum = pies * den;
+    const num = randInt(1, maxNum);
+    return { num, den, pies };
+  }
+
+  function generateExamples() {
+    examples  = [];
+    results   = new Array(TOTAL).fill(null);
+    cutStates = Array.from({ length: TOTAL }, () => ({ left: false, right: false }));
+    currentIndex = 0;
+
+    const types = ['same_denom', 'same_num'];
+    let attempts = 0;
+
+    while (examples.length < TOTAL && attempts < 10000) {
+      attempts++;
+      const type = types[Math.floor(Math.random() * types.length)];
+      let ex = null;
+
+      if (type === 'same_denom') {
+        const den  = randInt(2, 12);
+        const piesL = randInt(1, 2);
+        const piesR = randInt(1, 2);
+        const numL = randInt(1, piesL * den);
+        const numR = randInt(1, piesR * den);
+        ex = { numL, denL: den, piesL, numR, denR: den, piesR, type };
+      } else {
+        const denL  = randInt(2, 12);
+        let   denR  = randInt(2, 12);
+        let tries2 = 0;
+        while (denR === denL && tries2 < 20) { denR = randInt(2, 12); tries2++; }
+        const maxNum = Math.min(2 * denL, 2 * denR, 12);
+        if (maxNum < 1) continue;
+        const num = randInt(1, maxNum);
+        const piesL = Math.ceil(num / denL);
+        const piesR = Math.ceil(num / denR);
+        if (piesL > 2 || piesR > 2) continue;
+        ex = { numL: num, denL, piesL, numR: num, denR, piesR, type };
+      }
+
+      ex.sign = compareSign(ex.numL, ex.denL, ex.numR, ex.denR);
+      ex.explanation = null; // built lazily on reveal
+      examples.push(ex);
+    }
+
+    document.getElementById('progressSection').style.display = 'block';
+    document.getElementById('navButtons').style.display = 'flex';
+    buildRulesCard();
+    renderProgress();
+    renderCard();
+  }
+
+  // ── Rules reference card ───────────────────────────────────────────
+
+  function miniPieSVG(den, filled, color) {
+    const r = 22, cx = 24, cy = 24, size = 48;
+    const angleStep = (2 * Math.PI) / den;
+    let paths = '';
+    for (let i = 0; i < den; i++) {
+      const a1 = -Math.PI / 2 + i * angleStep;
+      const a2 = a1 + angleStep;
+      const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+      const x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+      const la = angleStep > Math.PI ? 1 : 0;
+      const fc = i < filled ? color : EMPTY_COLOR;
+      paths += `<path d="M${cx},${cy}L${x1},${y1}A${r},${r} 0 ${la} 1 ${x2},${y2}Z" fill="${fc}" stroke="white" stroke-width="1.5"/>`;
+    }
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" class="rule-mini-svg">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="${EMPTY_COLOR}" stroke="${color}" stroke-width="1.5"/>
+      ${paths}
+    </svg>`;
+  }
+
+  function exFrac(num, den, color) {
+    return `<span class="ex-frac" style="color:${color}">
+      <span>${num}</span><span class="ex-line"></span><span>${den}</span>
+    </span>`;
+  }
+
+  function buildRulesCard() {
+    const anatomy = document.getElementById('anatomyRow');
+    anatomy.innerHTML = `
+      <div class="anatomy-item">
+        <div class="anatomy-fraction">
+          <span class="anatomy-num">3</span>
+          <div class="anatomy-line"></div>
+          <span class="anatomy-den">4</span>
+        </div>
+        <div class="anatomy-labels">
+          <div class="anatomy-label num-label">
+            <span class="dot"></span><span>${t('anatomy_num')}</span>
+          </div>
+          <div class="anatomy-label den-label">
+            <span class="dot"></span><span>${t('anatomy_den')}</span>
+          </div>
+        </div>
+      </div>
+      <div class="anatomy-sep"></div>
+      <div style="font-size:0.8rem;font-weight:700;color:#6b6178;max-width:180px;line-height:1.5;">
+        ${t('anatomy_hint')}
+      </div>`;
+
+    const grid = document.getElementById('rulesGrid');
+    grid.innerHTML = `
+      <div class="rule-item rule-denom">
+        <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+          ${miniPieSVG(6, 4, LEFT_COLOR)}
+          ${miniPieSVG(6, 2, RIGHT_COLOR)}
+        </div>
+        <div class="rule-text">
+          <strong>${t('rule_denom_label')}</strong>
+          ${t('rule_denom_text')}
+          <div class="rule-example">
+            ${exFrac(4,6,'#3a7ec2')} <span class="ex-sign">&gt;</span> ${exFrac(2,6,'#3a9a6a')}
+          </div>
+        </div>
+      </div>
+      <div class="rule-item rule-num">
+        <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+          ${miniPieSVG(4, 3, LEFT_COLOR)}
+          ${miniPieSVG(8, 3, RIGHT_COLOR)}
+        </div>
+        <div class="rule-text">
+          <strong>${t('rule_num_label')}</strong>
+          ${t('rule_num_text')}
+          <div class="rule-example">
+            ${exFrac(3,4,'#3a7ec2')} <span class="ex-sign">&gt;</span> ${exFrac(3,8,'#3a9a6a')}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // ── Progress ───────────────────────────────────────────────────────
+
+  function renderProgress() {
+    const track = document.getElementById('progressBar');
+    track.innerHTML = '';
+    let correct = 0, wrong = 0;
+    results.forEach(r => {
+      const seg = document.createElement('div');
+      seg.className = 'progress-segment';
+      if (r === 'correct') { seg.classList.add('correct'); correct++; }
+      else if (r === 'wrong') { seg.classList.add('wrong'); wrong++; }
+      track.appendChild(seg);
+    });
+    const answered = results.filter(r => r !== null).length;
+    document.getElementById('progressCounter').textContent = `${answered} / ${TOTAL}`;
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('wrongCount').textContent = wrong;
+  }
+
+  // ── SVG Pie ────────────────────────────────────────────────────────
+
+  /**
+   * Build SVG markup for a single pie.
+   * @param {number} den  - denominator (slices count)
+   * @param {number} num  - slices to fill (for this pie only)
+   * @param {boolean} cut - whether knife has been pressed
+   * @param {string[]} colors - fill colors
+   * @param {string} side - 'left' | 'right'
+   * @param {number} pieIdx - index among pies on this side
+   */
+  function buildPieSVG(den, num, cut, color, side, pieIdx) {
+    const r  = PIE_R;
+    const cx = PIE_CX;
+    const cy = PIE_CY;
+    const size = PIE_SIZE;
+
+    if (!cut) {
+      return `<svg class="pie-svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" opacity="0.22" stroke="${color}" stroke-width="2"/>
+        <circle cx="${cx}" cy="${cy}" r="${r * 0.35}" fill="white" opacity="0.6"/>
+      </svg>`;
+    }
+
+    // Cut pie: build sectors
+    const angleStep = (2 * Math.PI) / den;
+    let paths = '';
+    let lines = '';
+
+    for (let i = 0; i < den; i++) {
+      const startAngle = -Math.PI / 2 + i * angleStep;
+      const endAngle   = startAngle + angleStep;
+      const x1 = cx + r * Math.cos(startAngle);
+      const y1 = cy + r * Math.sin(startAngle);
+      const x2 = cx + r * Math.cos(endAngle);
+      const y2 = cy + r * Math.sin(endAngle);
+      const largeArc = angleStep > Math.PI ? 1 : 0;
+      const filled = i < num;
+      const fillColor = filled ? color : EMPTY_COLOR;
+      const delay = i * 40;
+
+      paths += `<path
+        d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z"
+        fill="${fillColor}"
+        stroke="white" stroke-width="1.5"
+        style="animation: fillIn 0.35s ease ${delay}ms both; transform-origin: ${cx}px ${cy}px;"
+      />`;
+    }
+
+    // Radial cut lines
+    for (let i = 0; i < den; i++) {
+      const angle = -Math.PI / 2 + i * angleStep;
+      const lx = cx + r * Math.cos(angle);
+      const ly = cy + r * Math.sin(angle);
+      const delay = i * 40 + 10;
+      lines += `<line
+        x1="${cx}" y1="${cy}" x2="${lx}" y2="${ly}"
+        stroke="white" stroke-width="2" stroke-linecap="round"
+        stroke-dasharray="200" stroke-dashoffset="200"
+        style="animation: lineGrow 0.3s ease ${delay}ms forwards;"
+      />`;
+    }
+
+    return `<svg class="pie-svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="${EMPTY_COLOR}" stroke="${color}" stroke-width="2.5"/>
+      ${paths}
+      ${lines}
+      <circle cx="${cx}" cy="${cy}" r="${r * 0.22}" fill="white" opacity="0.7"/>
+    </svg>`;
+  }
+
+  /**
+   * Build the full pies group for one side.
+   * Distributes numerator slices across multiple pies.
+   */
+  function buildPiesHTML(num, den, pies, cut, color, side, exIdx) {
+    const actualPies = num > den ? 2 : 1;
+    let html = '<div class="pies-row">';
+    let remaining = num;
+
+    for (let p = 0; p < actualPies; p++) {
+      const slicesHere = Math.min(remaining, den);
+      remaining -= slicesHere;
+      html += `<div class="pie-wrapper">
+        ${buildPieSVG(den, slicesHere, cut, color, side, p)}
+      </div>`;
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  // ── Card render ────────────────────────────────────────────────────
+
+  function renderCard() {
+    const ex     = examples[currentIndex];
+    const result = results[currentIndex];
+    const cut    = cutStates[currentIndex];
+    const locked = result !== null;
+
+    const bothCut = cut.left && cut.right;
+
+    // Badge
+    let badge = '';
+    if (result === 'correct') badge = `<div class="card-badge correct-badge">✅</div>`;
+    else if (result === 'wrong') badge = `<div class="card-badge wrong-badge">❌</div>`;
+
+    // Knife hint
+    let knifeHintLeft = '', knifeHintRight = '';
+    if (!cut.left && !locked)  knifeHintLeft  = `<div class="knife-hint-text" id="hintLeft">${ex.piesL > 1 ? t('knife_hint') : t('knife_hint_one')}</div>`;
+    else knifeHintLeft = `<div class="knife-hint-text hidden" id="hintLeft"></div>`;
+    if (!cut.right && !locked) knifeHintRight = `<div class="knife-hint-text" id="hintRight">${ex.piesR > 1 ? t('knife_hint') : t('knife_hint_one')}</div>`;
+    else knifeHintRight = `<div class="knife-hint-text hidden" id="hintRight"></div>`;
+
+    // Knife buttons
+    const knifeLeft  = locked
+      ? `<button class="knife-btn cut" disabled>🔪</button>`
+      : `<button class="knife-btn ${cut.left ? 'cut' : ''}" onclick="cutPie('left')" title="Cut!">🔪</button>`;
+    const knifeRight = locked
+      ? `<button class="knife-btn cut" disabled>🔪</button>`
+      : `<button class="knife-btn ${cut.right ? 'cut' : ''}" onclick="cutPie('right')" title="Cut!">🔪</button>`;
+
+    // Pies HTML
+    const leftPies  = buildPiesHTML(ex.numL, ex.denL, ex.piesL, cut.left,  LEFT_COLOR,  'left',  currentIndex);
+    const rightPies = buildPiesHTML(ex.numR, ex.denR, ex.piesR, cut.right, RIGHT_COLOR, 'right', currentIndex);
+
+    // Fraction display
+    const signContent = locked
+      ? (result === 'correct'
+          ? `<span class="sign-box filled-correct">${ex.sign}</span>`
+          : `<span class="sign-box filled-wrong">${ex.sign}</span>`)
+      : `<span class="sign-box" id="signBox">○</span>`;
+
+    // Sign buttons
+    const signDisabled = (!bothCut && !locked) ? 'disabled' : '';
+    const lockedHint = (!bothCut && !locked)
+      ? `<div class="locked-hint" data-i18n="sign_locked_hint">${t('sign_locked_hint')}</div>`
+      : '';
+
+    let signBtns = '';
+    ['<', '=', '>'].forEach(s => {
+      let cls = '';
+      if (locked && s === ex.sign) cls = result === 'correct' ? 'selected-correct' : 'selected-wrong';
+      signBtns += `<button class="sign-btn ${cls}" onclick="checkAnswer('${s}')" ${locked ? 'disabled' : signDisabled}>${s}</button>`;
+    });
+
+    // Feedback
+    let feedbackText = '', feedbackClass = '', explanationText = '', explanationVisible = '';
+    if (result === 'correct') {
+      feedbackText = t('feedback_correct');
+      feedbackClass = 'correct';
+      explanationText = buildExplanation(ex);
+      explanationVisible = 'visible';
+    } else if (result === 'wrong') {
+      feedbackText = t('feedback_wrong', { sign: ex.sign });
+      feedbackClass = 'wrong';
+      explanationText = buildExplanation(ex);
+      explanationVisible = 'visible';
+    }
+
+    const area = document.getElementById('exampleArea');
+    area.innerHTML = `
+      <div class="example-card" id="exampleCard">
+        ${badge}
+        <div class="example-num">${t('example_counter', { current: currentIndex + 1, total: TOTAL })}</div>
+
+        <!-- VISUALIZATION -->
+        <div class="viz-row">
+          <div class="pie-section left-section">
+            <div class="section-label">${t('left_label')}</div>
+            ${knifeLeft}
+            ${leftPies}
+            ${knifeHintLeft}
+          </div>
+
+          <div class="viz-sep">
+            <div class="viz-sep-line"></div>
+            <div class="viz-sep-icon">⚖️</div>
+            <div class="viz-sep-line"></div>
+          </div>
+
+          <div class="pie-section right-section">
+            <div class="section-label">${t('right_label')}</div>
+            ${knifeRight}
+            ${rightPies}
+            ${knifeHintRight}
+          </div>
+        </div>
+
+        <!-- COMPARISON EXPRESSION -->
+        <div class="comparison-row">
+          <div class="fraction-display">
+            <span class="frac-num left-color">${ex.numL}</span>
+            <div class="frac-line"></div>
+            <span class="frac-den">${ex.denL}</span>
+          </div>
+          ${signContent}
+          <div class="fraction-display">
+            <span class="frac-num right-color">${ex.numR}</span>
+            <div class="frac-line"></div>
+            <span class="frac-den">${ex.denR}</span>
+          </div>
+        </div>
+
+        <!-- SIGN BUTTONS -->
+        <div class="sign-btn-area">
+          <div class="sign-label">${t('choose_sign')}</div>
+          <div class="sign-buttons">${signBtns}</div>
+          ${lockedHint}
+        </div>
+
+        <!-- FEEDBACK -->
+        <div class="feedback ${feedbackClass}" id="feedback">${feedbackText}</div>
+        <div class="explanation ${explanationVisible}" id="explanation">${explanationText}</div>
+      </div>`;
+
+    updateNavBtns();
+  }
+
+  // ── Knife interaction ──────────────────────────────────────────────
+
+  function cutPie(side) {
+    if (results[currentIndex] !== null) return;
+    cutStates[currentIndex][side] = true;
+    renderCard();
+  }
+
+  // ── Answer check ───────────────────────────────────────────────────
+
+  function checkAnswer(chosen) {
+    if (results[currentIndex] !== null) return;
+    const ex = examples[currentIndex];
+    const card = document.getElementById('exampleCard');
+    const correct = chosen === ex.sign;
+
+    if (correct) {
+      results[currentIndex] = 'correct';
+      renderProgress();
+      card.classList.add('glow-correct');
+      launchConfetti();
+      showEmoji('🎉');
+      setTimeout(() => renderCard(), 700);
+    } else {
+      results[currentIndex] = 'wrong';
+      renderProgress();
+      card.classList.add('shake');
+      showEmoji('😢');
+      setTimeout(() => {
+        card.classList.remove('shake');
+        card.classList.add('glow-wrong');
+        renderCard();
+      }, 450);
+    }
+  }
+
+  // ── Navigation ─────────────────────────────────────────────────────
+
+  document.addEventListener('i18n:ready', () => {
+    buildRulesCard();
+  });
+
+  function navigate(dir) {
+    const next = currentIndex + dir;
+    if (next < 0 || next >= examples.length) return;
+    currentIndex = next;
+    renderCard();
+  }
+
+  function updateNavBtns() {
+    document.getElementById('prevBtn').disabled = currentIndex === 0;
+    document.getElementById('nextBtn').disabled = currentIndex === examples.length - 1;
+  }
+
+  // ── Effects ────────────────────────────────────────────────────────
+
+  const CONFETTI_COLORS = ['#f4845f','#6bbf94','#74b3e8','#f9d56e','#c49de8','#f47c7c'];
+
+  function launchConfetti() {
+    const c = document.getElementById('confettiContainer');
+    for (let i = 0; i < 65; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.top  = '-20px';
+      p.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+      p.style.width  = (7 + Math.random() * 9) + 'px';
+      p.style.height = (7 + Math.random() * 9) + 'px';
+      p.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+      p.style.animationDuration = (1.4 + Math.random() * 2) + 's';
+      p.style.animationDelay   = (Math.random() * 0.5) + 's';
+      c.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
+    }
+  }
+
+  function showEmoji(e) {
+    const el = document.createElement('div');
+    el.className = 'emoji-burst';
+    el.textContent = e;
+    document.body.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+  }
+</script>
+</body>
+</html>

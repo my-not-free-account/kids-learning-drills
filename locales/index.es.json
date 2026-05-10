@@ -7,6 +7,7 @@
   "section_multiply": "Multiplicación",
   "section_divide": "División",
   "section_subtract": "Resta",
+  "section_fraction": "Fracciones",
   "card_multiply_title": "Tabla de multiplicar",
   "card_multiply_desc": "20 ejercicios por ronda. Visualización con cestas y pollitos. Elige una tabla o mezcla del 2 al 10.",
   "card_divide_main_title": "Ejercicios de división",
@@ -18,5 +19,8 @@
   "tag_multiply": "Multiplicación",
   "tag_divide": "División",
   "tag_subtract": "Resta",
+  "card_fraction_compare_title": "Comparar fracciones",
+  "card_fraction_compare_desc": "20 ejercicios. Visualización con pasteles: córtalos con el cuchillo y elige el signo > < =. Denominadores e numeradores iguales.",
+  "tag_fraction": "Fracciones",
   "footer_note": "Prototipos de aplicaciones educativas · Control de versiones en <a href=\"https://github.com\" target=\"_blank\">GitHub</a>"
 }

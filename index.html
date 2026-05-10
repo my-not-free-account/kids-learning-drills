@@ -7,36 +7,9 @@
 <script>const PAGE_KEY = 'index';</script>
 <script src="i18n/index.js" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #fdf6ee;
-    --card: #fff9f2;
-    --primary: #f4845f;
-    --primary-light: #fdddd3;
-    --accent: #6bbf94;
-    --accent-light: #d4f0e3;
-    --blue: #74b3e8;
-    --blue-light: #d8edfc;
-    --yellow: #f9d56e;
-    --yellow-light: #fef6d6;
-    --purple: #c49de8;
-    --purple-light: #eedeff;
-    --text: #3d3642;
-    --muted: #a09aab;
-    --border: #ecdfd4;
-    --radius: 20px;
-    --radius-sm: 12px;
-    --shadow: 0 4px 24px rgba(100,60,30,0.08);
-    --shadow-hover: 0 8px 36px rgba(100,60,30,0.14);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
+<link rel="stylesheet" href="index.css">
+  <style>
   body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
     padding: 40px 16px 64px;
     background-image:
       radial-gradient(circle at 10% 10%, #fde6da55 0%, transparent 40%),
@@ -45,39 +18,12 @@
       radial-gradient(circle at 20% 80%, #eedeff33 0%, transparent 30%);
   }
 
-  /* ── DECORATIVE FLOATING ICONS ── */
-  .deco {
-    position: fixed;
-    pointer-events: none;
-    user-select: none;
-    font-size: 2.4rem;
-    opacity: 0.15;
-    animation: float 6s ease-in-out infinite;
-  }
-  .deco:nth-child(1) { top: 5%;    left: 3%;   animation-delay: 0s; }
-  .deco:nth-child(2) { top: 12%;   right: 5%;  animation-delay: 1s;   font-size: 2rem; }
-  .deco:nth-child(3) { bottom: 8%; left: 6%;   animation-delay: 2s;   font-size: 1.8rem; }
-  .deco:nth-child(4) { bottom: 15%;right: 4%;  animation-delay: 3s; }
-  .deco:nth-child(5) { top: 50%;   left: 1%;   animation-delay: 1.5s; font-size: 1.6rem; }
-  .deco:nth-child(6) { top: 35%;   right: 2%;  animation-delay: 2.5s; font-size: 1.9rem; }
+  .deco { opacity: 0.15; }
 
-  @keyframes float {
-    0%,100% { transform: translateY(0px) rotate(0deg); }
-    50%      { transform: translateY(-12px) rotate(5deg); }
-  }
-
-  /* ── LAYOUT ── */
-  .container {
-    max-width: 760px;
-    margin: 0 auto;
-  }
+  .container { max-width: 760px; }
 
   /* ── HEADER ── */
-  .header {
-    text-align: center;
-    margin-bottom: 48px;
-    animation: fadeDown 0.6s ease both;
-  }
+  .header { text-align: center; margin-bottom: 48px; animation: fadeDown 0.6s ease both; }
 
   .header-badge {
     display: inline-block;
@@ -93,30 +39,14 @@
   }
 
   h1 {
-    font-family: 'Baloo 2', cursive;
     font-size: 2.6rem;
-    font-weight: 800;
     color: var(--text);
     line-height: 1.15;
     margin-bottom: 12px;
-    letter-spacing: -0.5px;
   }
-
   h1 span { color: var(--primary); }
 
-  .subtitle {
-    color: var(--muted);
-    font-size: 1rem;
-    font-weight: 600;
-    max-width: 420px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .subtitle { font-weight: 600; max-width: 420px; margin: 0 auto; line-height: 1.6; }
 
   /* ── SECTION LABEL ── */
   .section-label {
@@ -130,7 +60,6 @@
     align-items: center;
     gap: 10px;
   }
-
   .section-label::after {
     content: '';
     flex: 1;
@@ -146,7 +75,6 @@
     gap: 16px;
     margin-bottom: 40px;
   }
-
   @media (max-width: 540px) {
     .trainers-grid { grid-template-columns: 1fr; }
     h1 { font-size: 2rem; }
@@ -169,7 +97,6 @@
     overflow: hidden;
     animation: fadeUp 0.5s ease both;
   }
-
   .trainer-card::before {
     content: '';
     position: absolute;
@@ -177,25 +104,17 @@
     height: 4px;
     border-radius: var(--radius) var(--radius) 0 0;
   }
+  .trainer-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
 
-  .trainer-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-  }
-
-  /* Color accents per operation */
   .card-multiply::before  { background: var(--primary); }
   .card-divide::before    { background: var(--blue); }
   .card-subtract::before  { background: var(--accent); }
+  .card-fraction::before  { background: var(--purple); }
 
   .card-multiply:hover  { border-color: var(--primary); }
   .card-divide:hover    { border-color: var(--blue); }
   .card-subtract:hover  { border-color: var(--accent); }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .card-fraction:hover  { border-color: var(--purple); }
 
   .trainer-card:nth-child(1) { animation-delay: 0.1s; }
   .trainer-card:nth-child(2) { animation-delay: 0.2s; }
@@ -203,13 +122,8 @@
   .trainer-card:nth-child(4) { animation-delay: 0.4s; }
   .trainer-card:nth-child(5) { animation-delay: 0.5s; }
 
-  .card-icon {
-    font-size: 2.2rem;
-    line-height: 1;
-  }
-
-  .card-body { flex: 1; }
-
+  .card-icon  { font-size: 2.2rem; line-height: 1; }
+  .card-body  { flex: 1; }
   .card-title {
     font-family: 'Baloo 2', cursive;
     font-size: 1.15rem;
@@ -218,21 +132,8 @@
     margin-bottom: 4px;
     line-height: 1.2;
   }
-
-  .card-desc {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  .card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 4px;
-  }
-
+  .card-desc { font-size: 0.82rem; font-weight: 600; color: var(--muted); line-height: 1.5; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
   .card-tag {
     font-size: 0.72rem;
     font-weight: 800;
@@ -241,35 +142,24 @@
     text-transform: uppercase;
     letter-spacing: 0.3px;
   }
+  .tag-multiply  { background: var(--primary-light); color: var(--primary); }
+  .tag-divide    { background: var(--blue-light);    color: #4a8ec2; }
+  .tag-subtract  { background: var(--accent-light);  color: #3a9a6a; }
+  .tag-fraction  { background: var(--purple-light);  color: #8a62c8; }
 
-  .tag-multiply  { background: var(--primary-light);  color: var(--primary); }
-  .tag-divide    { background: var(--blue-light);      color: #4a8ec2; }
-  .tag-subtract  { background: var(--accent-light);    color: #3a9a6a; }
-
-  .card-version {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--muted);
-    opacity: 0.7;
-  }
-
+  .card-version { font-size: 0.7rem; font-weight: 700; color: var(--muted); opacity: 0.7; }
   .card-arrow {
     position: absolute;
-    bottom: 22px;
-    right: 22px;
+    bottom: 22px; right: 22px;
     font-size: 1rem;
     color: var(--muted);
     opacity: 0;
     transform: translateX(-6px);
     transition: opacity 0.2s, transform 0.2s;
   }
+  .trainer-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
 
-  .trainer-card:hover .card-arrow {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  /* ── FOOTER NOTE ── */
+  /* ── FOOTER ── */
   .footer-note {
     text-align: center;
     color: var(--muted);
@@ -278,15 +168,9 @@
     padding-top: 8px;
     animation: fadeUp 0.5s ease 0.6s both;
   }
-
-  .footer-note a {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 700;
-  }
-
+  .footer-note a { color: var(--primary); text-decoration: none; font-weight: 700; }
   .footer-note a:hover { text-decoration: underline; }
-</style>
+  </style>
 </head>
 <body>
 
@@ -362,6 +246,23 @@
       </div>
       <div class="card-footer">
         <span class="card-tag tag-subtract" data-i18n="tag_subtract"></span>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+
+  </div>
+
+  <div class="section-label" data-i18n="section_fraction"></div>
+  <div class="trainers-grid">
+
+    <a class="trainer-card card-fraction" href="fraction-comparison.html">
+      <div class="card-icon">🥧</div>
+      <div class="card-body">
+        <div class="card-title" data-i18n="card_fraction_compare_title"></div>
+        <div class="card-desc" data-i18n="card_fraction_compare_desc"></div>
+      </div>
+      <div class="card-footer">
+        <span class="card-tag tag-fraction" data-i18n="tag_fraction"></span>
       </div>
       <span class="card-arrow">→</span>
     </a>
